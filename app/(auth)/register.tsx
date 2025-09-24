@@ -2,10 +2,9 @@ import LayoutBackground from '@/components/LayoutBackground';
 import Title from '@/components/ui/Title';
 import Button from '@/components/ui/button';
 import Input from '@/components/ui/input';
-import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
 import { api } from '@/services/axios';
 import { setToken } from '@/storage/token';
+import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React, { useState } from 'react';
 import {
@@ -14,6 +13,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -24,10 +24,8 @@ export default function RegisterScreen() {
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [loading] = useState(false);
   const [error, setError] = useState('');
-  const colorScheme = useColorScheme();
-  const colors = Colors[colorScheme ?? 'light'];
 
   // Função para aplicar máscara de telefone brasileiro
   const formatPhoneNumber = (text: string) => {
@@ -74,6 +72,17 @@ export default function RegisterScreen() {
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           style={styles.keyboardAvoidingView}>
           <ScrollView contentContainerStyle={styles.scrollContent}>
+            {/* Botão Voltar */}
+            <View style={styles.headerContainer}>
+              <TouchableOpacity 
+                style={styles.backButton} 
+                onPress={handleBackToLogin}
+                activeOpacity={0.7}
+              >
+                <Ionicons name="arrow-back" size={24} color="white" />
+              </TouchableOpacity>
+            </View>
+
             {/* Nome do App */}
             <View style={styles.appNameContainer}>
               <Title>
@@ -198,9 +207,23 @@ const styles = StyleSheet.create({
   scrollContent: {
     flexGrow: 1,
   },
+  headerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingTop: 10,
+  },
+  backButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   appNameContainer: {
     alignItems: 'center',
-    paddingVertical: 40,
+    paddingVertical: 12,
   },
   appTitle: {
     fontSize: 24,
