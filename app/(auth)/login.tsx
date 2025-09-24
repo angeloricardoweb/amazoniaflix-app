@@ -1,3 +1,4 @@
+import Logo from '@/components/Logo';
 import Button from '@/components/ui/button';
 import Input from '@/components/ui/input';
 import { Colors } from '@/constants/theme';
@@ -140,14 +141,14 @@ export default function LoginScreen() {
                 <Text style={styles.bannerText}>Bem-vindo de volta!</Text>
               </Animated.View>
 
-              {/* Nome do App */}
+              {/* Logo */}
               <Animated.View style={[
                 styles.appNameContainer,
                 {
                   paddingVertical: appNamePadding,
                 }
               ]}>
-                <Text style={[styles.appTitle]}>Meu App</Text>
+                <Logo width={180} height={22} color="white" />
               </Animated.View>
 
               {/* Formulário */}
@@ -242,10 +243,6 @@ const styles = StyleSheet.create({
   appNameContainer: {
     alignItems: 'center',
     paddingVertical: 40,
-  },
-  appTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
   },
   formContainer: {
     paddingHorizontal: 20,

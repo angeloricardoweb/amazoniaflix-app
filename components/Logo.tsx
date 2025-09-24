@@ -1,0 +1,99 @@
+import React from 'react';
+import { Path, Svg } from 'react-native-svg';
+
+interface LogoProps {
+  width?: number;
+  height?: number;
+  color?: string;
+}
+
+export default function Logo({ width = 225, height = 27, color = 'white' }: LogoProps) {
+  return (
+    <Svg width={width} height={height} viewBox="0 0 225 27" fill="none">
+      <Path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M0 26.6154L10.1353 5.33069L20.341 26.6154L16.4215 26.579L10.1325 13.5427L3.85526 26.6154H0Z"
+        fill={color}
+      />
+      <Path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M44.9096 13.4934V18.2625L48.9282 15.7626L44.9096 13.4934Z"
+        fill="#CE4427"
+      />
+      <Path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M44.8793 4.84395L64.8002 15.809L44.8974 26.7578L44.9095 22.5824L57.2151 15.8177L44.9095 9.08816L44.8793 4.84395Z"
+        fill="#E39846"
+      />
+      <Path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M25.6724 26.6154H22.1582L22.0439 5.3329L32.1965 13.6103L42.1816 5.4357L42.219 26.6154H38.8017L38.6465 12.8646L32.1806 18.2647L25.5845 12.7968L25.6724 26.6154Z"
+        fill={color}
+      />
+      <Path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M63.3386 4.97473L83.4523 5.01011L70.7568 22.6977L83.5982 22.7903V26.6154H63.2956L76.1452 8.97817L63.2557 8.92697L63.3386 4.97473Z"
+        fill={color}
+      />
+      <Path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M93.6028 5.11911C99.1058 5.11911 103.567 9.91628 103.567 15.8346C103.567 21.7526 99.1058 26.55 93.6028 26.55C88.0993 26.55 83.6381 21.7526 83.6381 15.8346C83.6381 9.91628 88.0993 5.11911 93.6028 5.11911ZM93.6028 8.93435C97.2049 8.93435 100.126 12.0235 100.126 15.8346C100.126 19.6454 97.2049 22.7345 93.6028 22.7345C90.0001 22.7345 87.0794 19.6454 87.0794 15.8346C87.0794 12.0235 90.0001 8.93435 93.6028 8.93435Z"
+        fill={color}
+      />
+      <Path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M90.377 4.28081H92.2635L94.2177 1.16009L96.0208 4.28081H98.0542L95.1013 -1.43051e-06H93.2332L90.377 4.28081Z"
+        fill={color}
+      />
+      <Path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M109.343 26.6154H105.682L105.645 5.14168L122.275 18.9293L122.348 5.14168H125.863L125.935 26.6154L109.244 12.8414L109.343 26.6154Z"
+        fill={color}
+      />
+      <Path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M128.707 5.14168H132.321V26.6154H128.707V5.14168Z"
+        fill={color}
+      />
+      <Path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M134.236 26.6154L144.371 5.33069L154.577 26.6154L150.657 26.579L144.368 13.5427L138.091 26.6154H134.236Z"
+        fill={color}
+      />
+      <Path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M198.958 5.14168H202.572V26.6154H198.958V5.14168Z"
+        fill="#CE4427"
+      />
+      <Path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M176.49 5.14168V8.87859L161.515 8.79657C159.805 9.05793 159.927 10.9652 159.991 13.0002H172.87L172.897 16.7517L159.991 16.7864V26.6076L156.424 26.6154L156.569 10.55C156.481 8.27279 158.859 5.14168 161.766 5.14168H176.49Z"
+        fill="#CE4427"
+      />
+      <Path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M195.705 22.8369H185.437C184.291 22.7347 183.059 21.6998 183.061 20.1719V5.14168H179.447V20.1719H179.432C179.477 23.763 182.656 26.5222 185.437 26.6154H195.705V22.8369Z"
+        fill="#CE4427"
+      />
+      <Path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M209.34 5.14168H205.026L212.758 15.8602L204.928 26.6154H209.51L214.94 18.9321L220.58 26.6154H224.973L217.103 15.8659L225 5.14168H220.619L214.968 12.8498L209.34 5.14168Z"
+        fill="#CE4427"
+      />
+    </Svg>
+  );
+}
