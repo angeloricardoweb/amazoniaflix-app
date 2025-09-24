@@ -10,13 +10,14 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Easing, Notifier } from 'react-native-notifier';
 
+import useFetchLoginBanner from '@/hooks/useFetchLoginBanner';
 import {
   Animated,
+  Image,
   ImageBackground,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -31,9 +32,12 @@ export default function LoginScreen() {
   const colorScheme = useColorScheme();
   const colors = Colors[colorScheme ?? 'light'];
 
+  const { banner } = useFetchLoginBanner();
+
+
   const bannerHeight = useMemo(() => new Animated.Value(1), []);
   const bannerOpacity = useMemo(() => new Animated.Value(1), []);
-  const appNamePadding = useMemo(() => new Animated.Value(40), []);
+  const appNamePadding = useMemo(() => new Animated.Value(20), []);
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
@@ -83,6 +87,7 @@ export default function LoginScreen() {
   }, [bannerHeight, bannerOpacity, appNamePadding]);
 
   const handleLogin = async () => {
+
     if (!email || !password) {
       setError('Email e senha são obrigatórios');
       return;
@@ -121,99 +126,96 @@ export default function LoginScreen() {
     <ImageBackground source={require('@/assets/images/splash.png')} style={{ flex: 1 }}>
       <View style={[styles.container]}>
         <StatusBar style="light" backgroundColor={colors.tint} />
-        <SafeAreaView style={[styles.safeArea]}>
-          <KeyboardAvoidingView
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            style={styles.keyboardAvoidingView}>
-            <ScrollView contentContainerStyle={styles.scrollContent}>
-              {/* Banner */}
-              <Animated.View style={[
-                styles.banner,
-                {
-                  backgroundColor: colors.tint,
-                  height: bannerHeight.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [0, 200], // Altura máxima do banner
-                  }),
-                  opacity: bannerOpacity,
-                }
-              ]}>
-                <Text style={styles.bannerText}>Bem-vindo de volta!</Text>
-              </Animated.View>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={styles.keyboardAvoidingView}>
+          <ScrollView contentContainerStyle={styles.scrollContent}>
+            {/* Banner */}
+            <Animated.View style={[
+              styles.banner,
+              {
+                backgroundColor: colors.tint,
+                height: bannerHeight.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [0, 375], // Altura máxima do banner
+                }),
+                opacity: bannerOpacity,
+              }
+            ]}>
+              <Image source={banner ? { uri: banner } : require('@/assets/images/splash.png')} style={{ width: '100%', height: '100%' }} />
+            </Animated.View>
 
-              {/* Logo */}
-              <Animated.View style={[
-                styles.appNameContainer,
-                {
-                  paddingVertical: appNamePadding,
-                }
-              ]}>
-                <Logo width={180} height={22} color="white" />
-              </Animated.View>
+            {/* Logo */}
+            <Animated.View style={[
+              styles.appNameContainer,
+              {
+                paddingVertical: appNamePadding,
+              }
+            ]}>
+              <Logo width={180} height={22} color="white" />
+            </Animated.View>
 
-              {/* Formulário */}
-              <View style={styles.formContainer}>
-                {error ? (
-                  <View style={styles.errorContainer}>
-                    <Text style={[styles.errorText, { color: '#FF3B30' }]}>{error}</Text>
-                  </View>
-                ) : null}
+            {/* Formulário */}
+            <View style={styles.formContainer}>
+              {error ? (
+                <View style={styles.errorContainer}>
+                  <Text style={[styles.errorText, { color: '#FF3B30' }]}>{error}</Text>
+                </View>
+              ) : null}
 
-                <Input
-                  label="Email"
-                  placeholder="Digite seu email"
-                  value={email}
-                  onChangeText={(text) => {
-                    setEmail(text);
-                    if (error) setError('');
-                  }}
-                  keyboardType="email-address"
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                  variant="default"
-                  size="large"
-                />
+              <Input
+                label="Email"
+                placeholder="Digite seu email"
+                value={email}
+                onChangeText={(text) => {
+                  setEmail(text);
+                  if (error) setError('');
+                }}
+                keyboardType="email-address"
+                autoCapitalize="none"
+                autoCorrect={false}
+                variant="default"
+                size="large"
+              />
 
-                <Input
-                  label="Senha"
-                  placeholder="Digite sua senha"
-                  value={password}
-                  onChangeText={(text) => {
-                    setPassword(text);
-                    if (error) setError('');
-                  }}
-                  secureTextEntry
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                  variant="default"
-                  size="large"
-                />
+              <Input
+                label="Senha"
+                placeholder="Digite sua senha"
+                value={password}
+                onChangeText={(text) => {
+                  setPassword(text);
+                  if (error) setError('');
+                }}
+                secureTextEntry
+                autoCapitalize="none"
+                autoCorrect={false}
+                variant="default"
+                size="large"
+              />
 
-                {/* Botões */}
-                <Button
-                  title="Entrar"
-                  onPress={handleLogin}
-                  variant="primary"
-                  size="large"
-                  loading={loading}
-                  disabled={loading}
-                  style={styles.loginButton}
-                />
+              {/* Botões */}
+              <Button
+                title="Entrar"
+                onPress={handleLogin}
+                variant="primary"
+                size="large"
+                loading={loading}
+                disabled={loading}
+                style={styles.loginButton}
+              />
 
-                <Button
-                  title="Criar Conta"
-                  onPress={handleRegister}
-                  variant="outline"
-                  size="large"
-                  style={styles.registerButton}
-                />
-              </View>
-            </ScrollView>
-          </KeyboardAvoidingView>
-        </SafeAreaView>
+              <Button
+                title="Criar Conta"
+                onPress={handleRegister}
+                variant="outline"
+                size="large"
+                style={styles.registerButton}
+              />
+            </View>
+          </ScrollView>
+        </KeyboardAvoidingView>
       </View>
     </ImageBackground>
-
   );
 }
 
