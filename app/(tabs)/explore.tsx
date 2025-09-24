@@ -1,26 +1,33 @@
 import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { useState } from 'react';
+import { Platform, StyleSheet, View } from 'react-native';
 
-import { Collapsible } from '@/components/ui/collapsible';
+import DrawerModal from '@/components/DrawerModal';
 import { ExternalLink } from '@/components/external-link';
+import FloatingMenuButton from '@/components/FloatingMenuButton';
 import ParallaxScrollView from '@/components/parallax-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { Collapsible } from '@/components/ui/collapsible';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { Fonts } from '@/constants/theme';
 
 export default function TabTwoScreen() {
+  const [drawerVisible, setDrawerVisible] = useState(false);
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
-      headerImage={
-        <IconSymbol
-          size={310}
-          color="#808080"
-          name="chevron.left.forwardslash.chevron.right"
-          style={styles.headerImage}
-        />
-      }>
+    <View style={{ flex: 1 }}>
+      <FloatingMenuButton onPress={() => setDrawerVisible(true)} />
+      <ParallaxScrollView
+        headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
+        headerImage={
+          <IconSymbol
+            size={310}
+            color="#808080"
+            name="chevron.left.forwardslash.chevron.right"
+            style={styles.headerImage}
+          />
+        }>
       <ThemedView style={styles.titleContainer}>
         <ThemedText
           type="title"
@@ -95,6 +102,12 @@ export default function TabTwoScreen() {
         })}
       </Collapsible>
     </ParallaxScrollView>
+    
+    <DrawerModal 
+      visible={drawerVisible} 
+      onClose={() => setDrawerVisible(false)} 
+    />
+    </View>
   );
 }
 
