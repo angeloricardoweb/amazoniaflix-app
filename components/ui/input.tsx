@@ -1,15 +1,14 @@
 import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
 import React, { useState } from 'react';
 import {
-    StyleSheet,
-    Text,
-    TextInput,
-    TextInputProps,
-    TextStyle,
-    TouchableOpacity,
-    View,
-    ViewStyle,
+  StyleSheet,
+  Text,
+  TextInput,
+  TextInputProps,
+  TextStyle,
+  TouchableOpacity,
+  View,
+  ViewStyle,
 } from 'react-native';
 
 export interface InputProps extends TextInputProps {
@@ -40,7 +39,8 @@ export default function Input({
   ...props
 }: InputProps) {
   const [isFocused, setIsFocused] = useState(false);
-  const colorScheme = useColorScheme();
+  // const colorScheme = useColorScheme();
+  const colorScheme = 'dark';
   const colors = Colors[colorScheme ?? 'light'];
 
   const getContainerStyle = (): ViewStyle => {
@@ -86,6 +86,7 @@ export default function Input({
       default: {
         backgroundColor: colors.background,
         borderColor: isFocused ? colors.tint : colors.border,
+        borderWidth: 1,
       },
       filled: {
         backgroundColor: colors.border,
@@ -135,7 +136,7 @@ export default function Input({
     return {
       ...baseStyle,
       ...sizeTextStyles[size],
-      ...style,
+      ...(style && typeof style === 'object' ? style : {}),
     };
   };
 
@@ -143,6 +144,7 @@ export default function Input({
     const baseStyle: TextStyle = {
       fontSize: 16,
       fontWeight: '600',
+      fontFamily: 'OpenSans',
       marginBottom: 8,
       color: colors.text,
     };
