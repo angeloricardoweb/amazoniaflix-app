@@ -9,10 +9,6 @@ import 'react-native-reanimated';
 
 import { getToken } from '@/storage/token';
 
-export const unstable_settings = {
-  anchor: '(tabs)',
-};
-
 export default function RootLayout() {
   // const colorScheme = useColorScheme();
   const colorScheme = 'dark';
@@ -46,16 +42,25 @@ export default function RootLayout() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+      <ThemeProvider
+        value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
+      >
         <NotifierWrapper>
-          <Stack>
+          <Stack
+            screenOptions={{
+              headerShown: false,
+            }}
+          >
             {isAuthenticated ? (
-              <>
-                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-                <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-              </>
+              <Stack.Screen
+                name="(tabs)"
+                options={{ headerShown: false }}
+              />
             ) : (
-              <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+              <Stack.Screen
+                name="(auth)"
+                options={{ headerShown: false }}
+              />
             )}
           </Stack>
           <StatusBar style="auto" />

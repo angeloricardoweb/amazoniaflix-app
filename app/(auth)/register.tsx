@@ -2,6 +2,7 @@ import LayoutBackground from '@/components/LayoutBackground';
 import Title from '@/components/ui/Title';
 import Button from '@/components/ui/button';
 import Input from '@/components/ui/input';
+import { Colors } from '@/constants/theme';
 import { api } from '@/services/axios';
 import { setToken } from '@/storage/token';
 import { Ionicons } from '@expo/vector-icons';
@@ -74,8 +75,8 @@ export default function RegisterScreen() {
           <ScrollView contentContainerStyle={styles.scrollContent}>
             {/* Botão Voltar */}
             <View style={styles.headerContainer}>
-              <TouchableOpacity 
-                style={styles.backButton} 
+              <TouchableOpacity
+                style={styles.backButton}
                 onPress={handleBackToLogin}
                 activeOpacity={0.7}
               >
@@ -88,6 +89,12 @@ export default function RegisterScreen() {
               <Title>
                 Criar Conta
               </Title>
+              <Text style={{ color: Colors.dark.text, fontSize: 16, fontWeight: 'bold', marginTop: 8 }}>
+                Comece agora mesmo
+              </Text>
+              <Text style={{ color: Colors.dark.text, fontSize: 16 }}>
+                Crie sua conta e assista todos os filmes
+              </Text>
             </View>
 
             {/* Formulário */}
