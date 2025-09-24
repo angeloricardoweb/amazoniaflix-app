@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { Platform, StyleSheet, View } from 'react-native';
 
 import DrawerModal from '@/components/DrawerModal';
-import FloatingMenuButton from '@/components/FloatingMenuButton';
 import { HelloWave } from '@/components/hello-wave';
 import ParallaxScrollView from '@/components/parallax-scroll-view';
 import { ThemedText } from '@/components/themed-text';
@@ -14,7 +13,7 @@ export default function HomeScreen() {
 
   return (
     <View style={{ flex: 1 }}>
-      <FloatingMenuButton onPress={() => setDrawerVisible(true)} />
+      {/* <FloatingMenuButton onPress={() => setDrawerVisible(true)} /> */}
       <ParallaxScrollView
         headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
         headerImage={

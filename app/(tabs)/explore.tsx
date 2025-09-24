@@ -4,7 +4,6 @@ import { Platform, StyleSheet, View } from 'react-native';
 
 import DrawerModal from '@/components/DrawerModal';
 import { ExternalLink } from '@/components/external-link';
-import FloatingMenuButton from '@/components/FloatingMenuButton';
 import ParallaxScrollView from '@/components/parallax-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
@@ -17,7 +16,7 @@ export default function TabTwoScreen() {
 
   return (
     <View style={{ flex: 1 }}>
-      <FloatingMenuButton onPress={() => setDrawerVisible(true)} />
+      {/* <FloatingMenuButton onPress={() => setDrawerVisible(true)} /> */}
       <ParallaxScrollView
         headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
         headerImage={
