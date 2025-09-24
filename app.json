@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "boilerplate-expo-v2",
-    "slug": "boilerplate-expo-v2",
+    "name": "AmazôniaFlix",
+    "slug": "amazoniaflix",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "boilerplateexpov2",
+    "scheme": "amazoniaflix",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
