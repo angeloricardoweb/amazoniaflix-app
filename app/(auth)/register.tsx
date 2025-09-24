@@ -1,3 +1,5 @@
+import LayoutBackground from '@/components/LayoutBackground';
+import Title from '@/components/ui/Title';
 import Button from '@/components/ui/button';
 import Input from '@/components/ui/input';
 import { Colors } from '@/constants/theme';
@@ -9,12 +11,12 @@ import React, { useState } from 'react';
 import {
   KeyboardAvoidingView,
   Platform,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
   View
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function RegisterScreen() {
   const [name, setName] = useState('');
@@ -31,7 +33,7 @@ export default function RegisterScreen() {
   const formatPhoneNumber = (text: string) => {
     // Remove todos os caracteres não numéricos
     const cleaned = text.replace(/\D/g, '');
-    
+
     // Aplica a máscara baseada no tamanho
     if (cleaned.length <= 2) {
       return cleaned;
@@ -66,119 +68,123 @@ export default function RegisterScreen() {
   };
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={styles.keyboardAvoidingView}>
-        <ScrollView contentContainerStyle={styles.scrollContent}>
-          {/* Nome do App */}
-          <View style={styles.appNameContainer}>
-            <Text style={[styles.appTitle, { color: colors.text }]}>Meu App</Text>
-          </View>
+    <LayoutBackground>
+      <SafeAreaView style={[styles.container]}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={styles.keyboardAvoidingView}>
+          <ScrollView contentContainerStyle={styles.scrollContent}>
+            {/* Nome do App */}
+            <View style={styles.appNameContainer}>
+              <Title>
+                Criar Conta
+              </Title>
+            </View>
 
-          {/* Formulário */}
-          <View style={styles.formContainer}>
-            {error ? (
-              <View style={styles.errorContainer}>
-                <Text style={[styles.errorText, { color: '#FF3B30' }]}>{error}</Text>
-              </View>
-            ) : null}
+            {/* Formulário */}
+            <View style={styles.formContainer}>
+              {error ? (
+                <View style={styles.errorContainer}>
+                  <Text style={[styles.errorText, { color: '#FF3B30' }]}>{error}</Text>
+                </View>
+              ) : null}
 
-            <Input
-              label="Nome"
-              placeholder="Digite seu nome completo"
-              value={name}
-              onChangeText={(text) => {
-                setName(text);
-                if (error) setError('');
-              }}
-              autoCapitalize="words"
-              autoCorrect={false}
-              variant="default"
-              size="large"
-            />
+              <Input
+                label="Nome"
+                placeholder="Digite seu nome completo"
+                value={name}
+                onChangeText={(text) => {
+                  setName(text);
+                  if (error) setError('');
+                }}
+                autoCapitalize="words"
+                autoCorrect={false}
+                variant="default"
+                size="large"
+              />
 
-            <Input
-              label="Email"
-              placeholder="Digite seu email"
-              value={email}
-              onChangeText={(text) => {
-                setEmail(text);
-                if (error) setError('');
-              }}
-              keyboardType="email-address"
-              autoCapitalize="none"
-              autoCorrect={false}
-              variant="default"
-              size="large"
-            />
+              <Input
+                label="Email"
+                placeholder="Digite seu email"
+                value={email}
+                onChangeText={(text) => {
+                  setEmail(text);
+                  if (error) setError('');
+                }}
+                keyboardType="email-address"
+                autoCapitalize="none"
+                autoCorrect={false}
+                variant="default"
+                size="large"
+              />
 
-            <Input
-              label="Telefone"
-              placeholder="(11) 99999-9999"
-              value={phone}
-              onChangeText={(text) => {
-                handlePhoneChange(text);
-                if (error) setError('');
-              }}
-              keyboardType="phone-pad"
-              maxLength={15}
-              variant="default"
-              size="large"
-            />
+              <Input
+                label="Telefone"
+                placeholder="(11) 99999-9999"
+                value={phone}
+                onChangeText={(text) => {
+                  handlePhoneChange(text);
+                  if (error) setError('');
+                }}
+                keyboardType="phone-pad"
+                maxLength={15}
+                variant="default"
+                size="large"
+              />
 
-            <Input
-              label="Senha"
-              placeholder="Digite sua senha"
-              value={password}
-              onChangeText={(text) => {
-                setPassword(text);
-                if (error) setError('');
-              }}
-              secureTextEntry
-              autoCapitalize="none"
-              autoCorrect={false}
-              variant="default"
-              size="large"
-            />
+              <Input
+                label="Senha"
+                placeholder="Digite sua senha"
+                value={password}
+                onChangeText={(text) => {
+                  setPassword(text);
+                  if (error) setError('');
+                }}
+                secureTextEntry
+                autoCapitalize="none"
+                autoCorrect={false}
+                variant="default"
+                size="large"
+              />
 
-            <Input
-              label="Confirmar Senha"
-              placeholder="Confirme sua senha"
-              value={confirmPassword}
-              onChangeText={(text) => {
-                setConfirmPassword(text);
-                if (error) setError('');
-              }}
-              secureTextEntry
-              autoCapitalize="none"
-              autoCorrect={false}
-              variant="default"
-              size="large"
-            />
+              <Input
+                label="Confirmar Senha"
+                placeholder="Confirme sua senha"
+                value={confirmPassword}
+                onChangeText={(text) => {
+                  setConfirmPassword(text);
+                  if (error) setError('');
+                }}
+                secureTextEntry
+                autoCapitalize="none"
+                autoCorrect={false}
+                variant="default"
+                size="large"
+              />
 
-            {/* Botões */}
-            <Button
-              title="Criar Conta"
-              onPress={handleRegister}
-              variant="primary"
-              size="large"
-              loading={loading}
-              disabled={loading}
-              style={styles.registerButton}
-            />
+              {/* Botões */}
+              <Button
+                title="Criar Conta"
+                onPress={handleRegister}
+                variant="primary"
+                size="large"
+                loading={loading}
+                disabled={loading}
+                style={styles.registerButton}
+              />
 
-            <Button
-              title="Já tenho uma conta"
-              onPress={handleBackToLogin}
-              variant="outline"
-              size="large"
-              style={styles.loginButton}
-            />
-          </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+              <Button
+                title="Já tenho uma conta"
+                onPress={handleBackToLogin}
+                variant="outline"
+                size="large"
+                style={styles.loginButton}
+              />
+            </View>
+          </ScrollView>
+        </KeyboardAvoidingView>
+      </SafeAreaView>
+    </LayoutBackground>
   );
 }
 

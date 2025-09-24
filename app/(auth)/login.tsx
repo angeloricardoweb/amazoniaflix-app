@@ -10,11 +10,11 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Easing, Notifier } from 'react-native-notifier';
 
+import LayoutBackground from '@/components/LayoutBackground';
 import useFetchLoginBanner from '@/hooks/useFetchLoginBanner';
 import {
   Animated,
   Image,
-  ImageBackground,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
@@ -123,7 +123,7 @@ export default function LoginScreen() {
   };
 
   return (
-    <ImageBackground source={require('@/assets/images/splash.png')} style={{ flex: 1 }}>
+    <LayoutBackground>
       <View style={[styles.container]}>
         <StatusBar style="light" backgroundColor={colors.tint} />
         <KeyboardAvoidingView
@@ -145,15 +145,15 @@ export default function LoginScreen() {
               <Image source={banner ? { uri: banner } : require('@/assets/images/splash.png')} style={{ width: '100%', height: '100%' }} />
             </Animated.View>
 
-             {/* Logo */}
-             <Animated.View style={[
-               styles.logoContainer,
-               {
-                 paddingVertical: appNamePadding,
-               }
-             ]}>
-               <Logo width={180} height={22} color="white" />
-             </Animated.View>
+            {/* Logo */}
+            <Animated.View style={[
+              styles.logoContainer,
+              {
+                paddingVertical: appNamePadding,
+              }
+            ]}>
+              <Logo width={180} height={22} color="white" />
+            </Animated.View>
 
             {/* Formulário */}
             <View style={styles.formContainer}>
@@ -215,7 +215,7 @@ export default function LoginScreen() {
           </ScrollView>
         </KeyboardAvoidingView>
       </View>
-    </ImageBackground>
+    </LayoutBackground>
   );
 }
 
