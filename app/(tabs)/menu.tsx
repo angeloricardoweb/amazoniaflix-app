@@ -1,9 +1,10 @@
 import DrawerModal from '@/components/DrawerModal';
+import ParallaxLayout from '@/components/ParallaxLayout';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
-import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 export default function MenuScreen() {
   const colorScheme = useColorScheme();
@@ -94,12 +95,12 @@ export default function MenuScreen() {
   ];
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
+    <View style={[styles.container]}>
+      <ParallaxLayout>
         {/* Header do Menu */}
-        <View style={[styles.header, { backgroundColor: colors.tint }]}>
-          <Text style={styles.headerTitle}>Menu</Text>
-          <Text style={styles.headerSubtitle}>Explore nosso conteúdo</Text>
+        <View style={styles.menuHeader}>
+          <Text style={[styles.headerTitle, { color: colors.text }]}>Menu</Text>
+          <Text style={[styles.headerSubtitle, { color: colors.tabIconDefault }]}>Explore nosso conteúdo</Text>
         </View>
 
         {/* Categorias do Menu */}
@@ -108,7 +109,7 @@ export default function MenuScreen() {
             <Text style={[styles.categoryTitle, { color: colors.text }]}>
               {category.title}
             </Text>
-            
+
             {category.items.map((item, itemIndex) => (
               <TouchableOpacity
                 key={itemIndex}
@@ -146,11 +147,11 @@ export default function MenuScreen() {
             Sua plataforma de streaming favorita
           </Text>
         </View>
-      </ScrollView>
+      </ParallaxLayout>
 
-      <DrawerModal 
-        visible={drawerVisible} 
-        onClose={() => setDrawerVisible(false)} 
+      <DrawerModal
+        visible={drawerVisible}
+        onClose={() => setDrawerVisible(false)}
       />
     </View>
   );
@@ -160,27 +161,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  scrollView: {
-    flex: 1,
-  },
-  scrollContent: {
-    paddingBottom: 40,
-  },
-  header: {
-    paddingTop: 60,
-    paddingBottom: 30,
-    paddingHorizontal: 20,
+  menuHeader: {
     alignItems: 'center',
+    paddingVertical: 20,
+    paddingHorizontal: 20,
   },
   headerTitle: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: 'white',
     marginBottom: 8,
   },
   headerSubtitle: {
     fontSize: 16,
-    color: 'rgba(255, 255, 255, 0.8)',
   },
   categoryContainer: {
     marginTop: 20,

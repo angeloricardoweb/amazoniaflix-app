@@ -1,10 +1,11 @@
 import DrawerModal from '@/components/DrawerModal';
+import ParallaxLayout from '@/components/ParallaxLayout';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React, { useState } from 'react';
-import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 export default function ProfileScreen() {
   const colorScheme = useColorScheme();
@@ -76,16 +77,16 @@ export default function ProfileScreen() {
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
+      <ParallaxLayout>
         {/* Header do Perfil */}
-        <View style={[styles.header, { backgroundColor: colors.tint }]}>
+        <View style={styles.profileHeader}>
           <View style={styles.avatarContainer}>
-            <View style={[styles.avatar, { backgroundColor: 'rgba(255, 255, 255, 0.2)' }]}>
+            <View style={[styles.avatar, { backgroundColor: colors.tint }]}>
               <Ionicons name="person" size={40} color="white" />
             </View>
           </View>
-          <Text style={styles.userName}>Usuário</Text>
-          <Text style={styles.userEmail}>usuario@email.com</Text>
+          <Text style={[styles.userName, { color: colors.text }]}>Usuário</Text>
+          <Text style={[styles.userEmail, { color: colors.tabIconDefault }]}>usuario@email.com</Text>
         </View>
 
         {/* Opções do Perfil */}
@@ -126,7 +127,7 @@ export default function ProfileScreen() {
           <Ionicons name="log-out-outline" size={24} color="white" />
           <Text style={styles.logoutText}>Sair da Conta</Text>
         </TouchableOpacity>
-      </ScrollView>
+      </ParallaxLayout>
 
       <DrawerModal 
         visible={drawerVisible} 
@@ -140,17 +141,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  scrollView: {
-    flex: 1,
-  },
-  scrollContent: {
-    paddingBottom: 40,
-  },
-  header: {
-    paddingTop: 60,
-    paddingBottom: 30,
-    paddingHorizontal: 20,
+  profileHeader: {
     alignItems: 'center',
+    paddingVertical: 20,
+    paddingHorizontal: 20,
   },
   avatarContainer: {
     marginBottom: 16,
@@ -165,12 +159,10 @@ const styles = StyleSheet.create({
   userName: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: 'white',
     marginBottom: 4,
   },
   userEmail: {
     fontSize: 16,
-    color: 'rgba(255, 255, 255, 0.8)',
   },
   optionsContainer: {
     marginTop: 20,
