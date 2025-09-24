@@ -37,7 +37,7 @@ export default function LoginScreen() {
 
   const bannerHeight = useMemo(() => new Animated.Value(1), []);
   const bannerOpacity = useMemo(() => new Animated.Value(1), []);
-  const appNamePadding = useMemo(() => new Animated.Value(20), []);
+  const appNamePadding = useMemo(() => new Animated.Value(8), []);
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
@@ -53,7 +53,7 @@ export default function LoginScreen() {
           useNativeDriver: false,
         }),
         Animated.timing(appNamePadding, {
-          toValue: 20,
+          toValue: 14,
           duration: 300,
           useNativeDriver: false,
         }),
@@ -73,7 +73,7 @@ export default function LoginScreen() {
           useNativeDriver: false,
         }),
         Animated.timing(appNamePadding, {
-          toValue: 40,
+          toValue: 8,
           duration: 300,
           useNativeDriver: false,
         }),
@@ -145,15 +145,15 @@ export default function LoginScreen() {
               <Image source={banner ? { uri: banner } : require('@/assets/images/splash.png')} style={{ width: '100%', height: '100%' }} />
             </Animated.View>
 
-            {/* Logo */}
-            <Animated.View style={[
-              styles.appNameContainer,
-              {
-                paddingVertical: appNamePadding,
-              }
-            ]}>
-              <Logo width={180} height={22} color="white" />
-            </Animated.View>
+             {/* Logo */}
+             <Animated.View style={[
+               styles.logoContainer,
+               {
+                 paddingVertical: appNamePadding,
+               }
+             ]}>
+               <Logo width={180} height={22} color="white" />
+             </Animated.View>
 
             {/* Formulário */}
             <View style={styles.formContainer}>
@@ -223,9 +223,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  safeArea: {
-    flex: 1,
-  },
   keyboardAvoidingView: {
     flex: 1,
   },
@@ -245,6 +242,14 @@ const styles = StyleSheet.create({
   appNameContainer: {
     alignItems: 'center',
     paddingVertical: 40,
+  },
+  logoContainer: {
+    alignItems: 'center',
+    paddingVertical: 20,
+    zIndex: 10,
+    marginHorizontal: 20,
+    marginTop: 40,
+    borderRadius: 8,
   },
   formContainer: {
     paddingHorizontal: 20,
