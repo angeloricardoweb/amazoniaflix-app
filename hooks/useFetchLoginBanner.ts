@@ -9,10 +9,10 @@ export default function useFetchLoginBanner() {
   const [banners, setBanners] = useState<Banner[] | null>(null);
 
   useEffect(() => {
-    fetchBanner();
+    fetcher();
   }, []);
 
-  async function fetchBanner() {
+  async function fetcher() {
     try {
       const response = await api.get("/auth/banner");
       setBanners(response.data.results.banners);

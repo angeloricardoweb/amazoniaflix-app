@@ -31,3 +31,9 @@ export interface IVideo extends IVideoLite {
   ];
   duracao: string;
 }
+
+export interface ICategoria {
+  id: number;
+  titulo: string;
+  slug: string;
+}
