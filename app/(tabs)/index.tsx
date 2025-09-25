@@ -1,8 +1,10 @@
 import LayoutBackground from '@/components/LayoutBackground';
 import Logo from '@/components/Logo';
 import { Colors } from '@/constants/theme';
+import useFetchCategorias from '@/hooks/useFetchCategorias';
 import useFetchHomeVideos from '@/hooks/useFetchHomeVideos';
 import { Ionicons } from '@expo/vector-icons';
+import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import {
   Dimensions,
@@ -20,6 +22,8 @@ const CARD_HEIGHT = CARD_WIDTH * 1.5;
 
 export default function HomeScreen() {
   const { data } = useFetchHomeVideos();
+  const { data: categorias } = useFetchCategorias();
+  const [selectedCategory, setSelectedCategory] = React.useState<number | null>(null);
 
   return (
     <LayoutBackground>
@@ -31,6 +35,33 @@ export default function HomeScreen() {
             <Ionicons name="search" size={20} color="white" />
           </TouchableOpacity>
         </View>
+        {/* Categories */}
+        <ScrollView 
+          horizontal 
+          showsHorizontalScrollIndicator={false}
+          style={styles.categoriesContainer}
+          contentContainerStyle={styles.categoriesContent}
+        >
+          {categorias?.map((categoria) => (
+            <TouchableOpacity 
+              key={categoria.id} 
+              style={[
+                styles.categoryButton,
+                selectedCategory === categoria.id && styles.categoryButtonSelected
+              ]}
+              onPress={() => setSelectedCategory(
+                selectedCategory === categoria.id ? null : categoria.id
+              )}
+            >
+              <Text style={[
+                styles.categoryText,
+                selectedCategory === categoria.id && styles.categoryTextSelected
+              ]}>
+                {categoria.titulo}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
         {/* Content */}
         <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
           {data?.map((secao) => (
@@ -73,6 +104,7 @@ export default function HomeScreen() {
           ))}
         </ScrollView>
       </View>
+      <StatusBar style="light" />
     </LayoutBackground>
   );
 }
@@ -96,6 +128,38 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.tint,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  categoriesContainer: {
+    marginVertical: 15,
+    maxHeight: 40,
+  },
+  categoriesContent: {
+    paddingHorizontal: 20,
+    height: 40,
+    gap: 12,
+  },
+  categoryButton: {
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 8,
+    borderWidth: 1,
+    height: 40,
+    borderColor: 'rgba(255, 255, 255, 0.2)',
+  },
+  categoryButtonSelected: {
+    backgroundColor: Colors.tint,
+    borderColor: Colors.tint,
+  },
+  categoryText: {
+    color: 'white',
+    fontSize: 14,
+    fontWeight: '600',
+    textAlign: 'center',
+  },
+  categoryTextSelected: {
+    color: 'white',
+    fontWeight: '700',
   },
   content: {
     flex: 1,
