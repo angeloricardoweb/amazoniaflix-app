@@ -23,7 +23,19 @@ const CARD_HEIGHT = CARD_WIDTH * 1.5;
 export default function HomeScreen() {
   const { data } = useFetchHomeVideos();
   const { data: categorias } = useFetchCategorias();
+
   const [selectedCategory, setSelectedCategory] = React.useState<number | null>(null);
+
+  // Selecionar vídeo aleatório para o card destacado
+  const getRandomVideo = React.useMemo(() => {
+    if (!data || data.length === 0) return null;
+    
+    const allVideos = data.flatMap(secao => secao.videos);
+    if (allVideos.length === 0) return null;
+    
+    const randomIndex = Math.floor(Math.random() * allVideos.length);
+    return allVideos[randomIndex];
+  }, [data]);
 
   return (
     <LayoutBackground>
@@ -35,6 +47,7 @@ export default function HomeScreen() {
             <Ionicons name="search" size={20} color="white" />
           </TouchableOpacity>
         </View>
+        
         {/* Categories */}
         <ScrollView 
           horizontal 
@@ -62,6 +75,32 @@ export default function HomeScreen() {
             </TouchableOpacity>
           ))}
         </ScrollView>
+        
+        {/* Featured Video Card */}
+        {getRandomVideo && (
+          <View style={styles.featuredCard}>
+            <View style={styles.featuredImageContainer}>
+              <Image
+                source={{ uri: getRandomVideo.banners.horizontal }}
+                style={styles.featuredImage}
+                resizeMode="cover"
+                blurRadius={0}
+                defaultSource={require('@/assets/images/icon.png')}
+                fadeDuration={0}
+                loadingIndicatorSource={require('@/assets/images/icon.png')}
+              />
+              <View style={styles.featuredOverlay}>
+                <View style={styles.featuredContent}>
+                  <TouchableOpacity style={styles.watchNowButton}>
+                    <Ionicons name="play" size={20} color="white" />
+                    <Text style={styles.watchNowText}>Assistir agora</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          </View>
+        )}
+
         {/* Content */}
         <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
           {data?.map((secao) => (
@@ -73,8 +112,8 @@ export default function HomeScreen() {
                 style={styles.horizontalScroll}
                 contentContainerStyle={styles.horizontalContent}
               >
-                {secao.videos.map((video) => (
-                  <View key={video.id} style={styles.movieCard}>
+                {secao.videos.map((video, index) => (
+                  <View key={index} style={styles.movieCard}>
                     <View style={styles.cardImageContainer}>
                       <Image
                         source={{ uri: video.banners.vertical }}
@@ -160,6 +199,70 @@ const styles = StyleSheet.create({
   categoryTextSelected: {
     color: 'white',
     fontWeight: '700',
+  },
+  featuredCard: {
+    marginHorizontal: 20,
+    marginBottom: 20,
+    borderRadius: 12,
+    overflow: 'hidden',
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+  },
+  featuredImageContainer: {
+    position: 'relative',
+    width: 375,
+    height: 350,
+    alignSelf: 'center',
+  },
+  featuredImage: {
+    width: '100%',
+    height: '100%',
+  },
+  featuredOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+  },
+  featuredContent: {
+    alignItems: 'center',
+    paddingHorizontal: 20,
+  },
+  featuredTitle: {
+    color: 'white',
+    fontSize: 28,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 20,
+    textShadowColor: 'rgba(0, 0, 0, 0.8)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 4,
+  },
+  watchNowButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: 'white',
+    gap: 8,
+  },
+  watchNowText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '600',
   },
   content: {
     flex: 1,
