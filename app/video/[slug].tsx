@@ -1,6 +1,8 @@
 import LayoutBackground from '@/components/LayoutBackground';
+import { Colors } from '@/constants/theme';
 import useFetchVideoDetails from '@/hooks/useFetchVideoDetails';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 import { router, useLocalSearchParams } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
@@ -92,6 +94,12 @@ export default function VideoDetailsScreen() {
                                 </TouchableOpacity>
                             </View>
                         </View>
+                        {/* Gradiente de baixo para cima */}
+                        <LinearGradient
+                            colors={['transparent', Colors.tint + '80']}
+                            style={styles.bannerGradient}
+                            locations={[0, 1]}
+                        />
                     </View>
 
                     {/* Informações do Vídeo */}
@@ -404,5 +412,12 @@ const styles = StyleSheet.create({
     },
     tabContent: {
         minHeight: 100,
+    },
+    bannerGradient: {
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        height: 100,
     },
 });
