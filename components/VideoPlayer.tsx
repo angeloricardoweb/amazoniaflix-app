@@ -26,7 +26,7 @@ interface VideoPlayerProps {
 export default function VideoPlayer({
   videoSource,
   style,
-  showControls = true,
+  showControls: enableControls = true,
   autoPlay = false,
   loop = false,
   onPlaybackEnd,
@@ -35,6 +35,8 @@ export default function VideoPlayer({
   const [hasError, setHasError] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [showControls, setShowControls] = useState(true);
+  const [controlsTimeout, setControlsTimeout] = useState<number | null>(null);
 
   const player = useVideoPlayer(videoSource, (player) => {
     player.loop = loop;
@@ -86,12 +88,28 @@ export default function VideoPlayer({
     return () => subscription.remove();
   }, [player, onPlaybackEnd]);
 
+  // Inicializar timeout dos controles quando o componente carrega
+  React.useEffect(() => {
+    if (showControls && !isLoading && !hasError) {
+      showControlsWithTimeout();
+    }
+    
+    // Cleanup timeout quando componente desmonta
+    return () => {
+      if (controlsTimeout) {
+        clearTimeout(controlsTimeout);
+      }
+    };
+  }, [isLoading, hasError]);
+
   const togglePlayPause = () => {
     if (isPlaying) {
       player.pause();
     } else {
       player.play();
     }
+    // Resetar timeout dos controles quando interagir
+    showControlsWithTimeout();
   };
 
   const handleReplay = () => {
@@ -120,17 +138,49 @@ export default function VideoPlayer({
   const handleSeekBackward = () => {
     const newTime = Math.max(0, currentTime - 5);
     player.currentTime = newTime;
+    // Resetar timeout dos controles quando interagir
+    showControlsWithTimeout();
   };
 
   const handleSeekForward = () => {
     const newTime = Math.min(duration, currentTime + 5);
     player.currentTime = newTime;
+    // Resetar timeout dos controles quando interagir
+    showControlsWithTimeout();
   };
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);
     return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  const hideControls = () => {
+    setShowControls(false);
+  };
+
+  const showControlsWithTimeout = () => {
+    setShowControls(true);
+    
+    // Limpar timeout anterior se existir
+    if (controlsTimeout) {
+      clearTimeout(controlsTimeout);
+    }
+    
+    // Definir novo timeout para esconder controles após 5 segundos
+    const timeout = setTimeout(() => {
+      hideControls();
+    }, 5000);
+    
+    setControlsTimeout(timeout);
+  };
+
+  const handleScreenTap = () => {
+    if (showControls) {
+      hideControls();
+    } else {
+      showControlsWithTimeout();
+    }
   };
 
   if (hasError) {
@@ -173,17 +223,18 @@ export default function VideoPlayer({
         </View>
       )}
 
-      {showControls && !isLoading && (
+      {!isLoading && enableControls && (
         <>
           {/* Área central clicável (invisível) */}
           <TouchableOpacity
             style={styles.centerClickArea}
-            onPress={togglePlayPause}
+            onPress={handleScreenTap}
             activeOpacity={1}
           />
           
           {/* Controles na parte inferior */}
-          <View style={styles.bottomControls}>
+          {showControls && (
+            <View style={styles.bottomControls}>
             {/* Botão Play/Pause no canto esquerdo */}
             <TouchableOpacity
               style={styles.playButton}
@@ -237,6 +288,7 @@ export default function VideoPlayer({
               </Text>
             </View>
           </View>
+          )}
         </>
       )}
     </View>
