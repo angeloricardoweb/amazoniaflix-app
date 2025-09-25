@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
   },
   movieCard: {
     width: CARD_WIDTH,
-    marginRight: 15,
+    marginRight: 8,
   },
   cardImageContainer: {
     position: 'relative',
