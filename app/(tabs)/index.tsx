@@ -1,5 +1,6 @@
 import LayoutBackground from '@/components/LayoutBackground';
 import Logo from '@/components/Logo';
+import VideoList from '@/components/VideoList';
 import { Colors } from '@/constants/theme';
 import useFetchCategorias from '@/hooks/useFetchCategorias';
 import useFetchHomeVideos from '@/hooks/useFetchHomeVideos';
@@ -8,7 +9,6 @@ import { router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import {
-  Dimensions,
   Image,
   ScrollView,
   StyleSheet,
@@ -17,9 +17,6 @@ import {
   View
 } from 'react-native';
 
-const { width } = Dimensions.get('window');
-const CARD_WIDTH = width * 0.32;
-const CARD_HEIGHT = CARD_WIDTH * 1.5;
 
 export default function HomeScreen() {
   const { data } = useFetchHomeVideos();
@@ -111,38 +108,13 @@ export default function HomeScreen() {
           )}
           {/* Content Sections */}
           {data?.map((secao) => (
-            <View key={secao.id} style={styles.section}>
-              <Text style={styles.sectionTitle}>{secao.titulo}</Text>
-              <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                style={styles.horizontalScroll}
-                contentContainerStyle={styles.horizontalContent}
-              >
-                {secao.videos.map((video, index) => (
-                  <TouchableOpacity 
-                    key={index} 
-                    style={styles.movieCard}
-                    onPress={() => router.push(`/video/${video.slug}`)}
-                  >
-                    <View style={styles.cardImageContainer}>
-                      <Image
-                        source={{ uri: video.banners.vertical }}
-                        style={styles.cardImage}
-                        resizeMode="cover"
-                        blurRadius={0}
-                        defaultSource={require('@/assets/images/icon.png')}
-                        fadeDuration={0}
-                        loadingIndicatorSource={require('@/assets/images/icon.png')}
-                      />
-                      <View style={styles.playOverlay}>
-                        <Ionicons name="play" size={24} color="white" />
-                      </View>
-                    </View>
-                  </TouchableOpacity>
-                ))}
-              </ScrollView>
-            </View>
+            <VideoList
+              key={secao.id}
+              title={secao.titulo}
+              videos={secao.videos}
+              horizontal={true}
+              showTitle={true}
+            />
           ))}
         </ScrollView>
       </View>
@@ -274,55 +246,6 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
     fontWeight: '600',
-  },
-  section: {
-    marginBottom: 30,
-    paddingHorizontal: 20,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: 'white',
-    marginBottom: 15,
-  },
-  horizontalScroll: {
-    marginHorizontal: -20,
-  },
-  horizontalContent: {
-    paddingHorizontal: 20,
-  },
-  movieCard: {
-    width: CARD_WIDTH,
-    marginRight: 8,
-  },
-  cardImageContainer: {
-    position: 'relative',
-    borderRadius: 8,
-    overflow: 'hidden',
-    marginBottom: 10,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-  },
-  cardImage: {
-    width: '100%',
-    height: CARD_HEIGHT,
-    borderRadius: 8,
-  },
-  playOverlay: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
   },
   cardActions: {
     flexDirection: 'row',

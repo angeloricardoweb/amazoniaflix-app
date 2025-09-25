@@ -1,5 +1,7 @@
 import LayoutBackground from '@/components/LayoutBackground';
+import VideoList from '@/components/VideoList';
 import { Colors } from '@/constants/theme';
+import useFetchHomeVideos from '@/hooks/useFetchHomeVideos';
 import useFetchVideoDetails from '@/hooks/useFetchVideoDetails';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -26,6 +28,9 @@ export default function VideoDetailsScreen() {
     const { data: videoDetails } = useFetchVideoDetails({
         slug: slug as string
     });
+
+    // Buscar vídeos da home para exibir como relacionados
+    const { data: homeVideos } = useFetchHomeVideos();
 
     if (!videoDetails) {
         return (
@@ -184,6 +189,16 @@ export default function VideoDetailsScreen() {
                             )}
                         </View>
                     </View>
+
+                    {/* Vídeos Relacionados */}
+                    {homeVideos && homeVideos.length > 0 && (
+                        <VideoList
+                            title="Vídeos Relacionados"
+                            videos={homeVideos[0]?.videos || []} // Usar primeira seção da home
+                            horizontal={true}
+                            showTitle={true}
+                        />
+                    )}
                 </ScrollView>
             </View>
             <StatusBar style="light" />
