@@ -2,8 +2,14 @@ import { IVideoLite } from "@/interfaces";
 import { api } from "@/services/axios";
 import { useEffect, useState } from "react";
 
+interface HomeVideos {
+  id: number;
+  titulo: string;
+  videos: IVideoLite[];
+}
+
 export default function useFetchHomeVideos() {
-  const [data, setData] = useState<IVideoLite[] | null>(null);
+  const [data, setData] = useState<HomeVideos[] | null>(null);
 
   useEffect(() => {
     fetcher();
