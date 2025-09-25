@@ -1,13 +1,14 @@
 import DrawerModal from '@/components/DrawerModal';
 import ParallaxLayout from '@/components/ParallaxLayout';
 import { Colors } from '@/constants/theme';
+import { useAuth } from '@/contexts/AuthContext';
 import { Ionicons } from '@expo/vector-icons';
-import { router } from 'expo-router';
 import React, { useState } from 'react';
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 export default function ProfileScreen() {
   const [drawerVisible, setDrawerVisible] = useState(false);
+  const { logout } = useAuth();
 
   const handleLogout = () => {
     Alert.alert(
@@ -21,8 +22,13 @@ export default function ProfileScreen() {
         {
           text: 'Sair',
           style: 'destructive',
-          onPress: () => {
-            router.replace('/(auth)');
+          onPress: async () => {
+            try {
+              await logout();
+            } catch (error) {
+              console.error('Erro ao fazer logout:', error);
+              Alert.alert('Erro', 'Não foi possível sair da conta. Tente novamente.');
+            }
           },
         },
       ]

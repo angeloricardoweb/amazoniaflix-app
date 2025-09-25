@@ -4,17 +4,24 @@ export const setToken = async (value: string) => {
   try {
     await AsyncStorage.setItem('token', value);
   } catch (e) {
-    console.log(e);
+    console.log('Erro ao salvar token:', e);
   }
 };
 
 export const getToken = async () => {
   try {
     const value = await AsyncStorage.getItem('token');
-    if (value !== null) {
-      return value;
-    }
+    return value;
   } catch (e) {
-    console.log(e);
+    console.log('Erro ao recuperar token:', e);
+    return null;
+  }
+};
+
+export const clearToken = async () => {
+  try {
+    await AsyncStorage.removeItem('token');
+  } catch (e) {
+    console.log('Erro ao remover token:', e);
   }
 };

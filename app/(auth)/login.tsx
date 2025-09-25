@@ -2,8 +2,8 @@ import Logo from '@/components/Logo';
 import Button from '@/components/ui/button';
 import Input from '@/components/ui/input';
 import { Colors } from '@/constants/theme';
+import { useAuth } from '@/contexts/AuthContext';
 import { api } from '@/services/axios';
-import { setToken } from '@/storage/token';
 import { router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -30,6 +30,7 @@ export default function LoginScreen() {
   const [error, setError] = useState('');
 
   const { banners } = useFetchLoginBanner();
+  const { login } = useAuth();
 
 
   const bannerHeight = useMemo(() => new Animated.Value(1), []);
@@ -96,7 +97,7 @@ export default function LoginScreen() {
     try {
       const { data } = await api.post('/auth/login', { email, password });
 
-      await setToken(data.results.token);
+      await login(data.results.token);
 
       Notifier.showNotification({
         title: 'Login realizado com sucesso!',
@@ -106,8 +107,6 @@ export default function LoginScreen() {
         showEasing: Easing.bounce,
         hideOnPress: false,
       });
-
-      router.replace('/(tabs)');
 
     } catch {
       setError('Erro de conexão. Tente novamente.');
