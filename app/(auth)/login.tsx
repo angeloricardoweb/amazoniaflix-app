@@ -29,7 +29,7 @@ export default function LoginScreen() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const { banner } = useFetchLoginBanner();
+  const { banners } = useFetchLoginBanner();
 
 
   const bannerHeight = useMemo(() => new Animated.Value(1), []);
@@ -97,7 +97,7 @@ export default function LoginScreen() {
       const { data } = await api.post('/auth/login', { email, password });
 
       await setToken(data.results.token);
-      
+
       Notifier.showNotification({
         title: 'Login realizado com sucesso!',
         description: 'Você está sendo redirecionado para a home.',
@@ -140,7 +140,7 @@ export default function LoginScreen() {
                 opacity: bannerOpacity,
               }
             ]}>
-              <Image source={banner ? { uri: banner } : require('@/assets/images/splash.png')} style={{ width: '100%', height: '100%' }} />
+              <Image source={banners ? { uri: banners[0].banner } : require('@/assets/images/splash.png')} style={{ width: '100%', height: '100%' }} />
             </Animated.View>
 
             {/* Logo */}

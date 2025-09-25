@@ -1,8 +1,12 @@
 import { api } from "@/services/axios";
 import { useEffect, useState } from "react";
 
+interface Banner {
+  banner: string;
+}
+
 export default function useFetchLoginBanner() {
-  const [banner, setBanner] = useState<string | null>(null);
+  const [banners, setBanners] = useState<Banner[] | null>(null);
 
   useEffect(() => {
     fetchBanner();
@@ -11,11 +15,11 @@ export default function useFetchLoginBanner() {
   async function fetchBanner() {
     try {
       const response = await api.get("/auth/banner");
-      setBanner(response.data.results.banner);
+      setBanners(response.data.results.banners);
     } catch (error: any) {
       console.error(error.response.data);
     }
   }
 
-  return { banner };
+  return { banners };
 }

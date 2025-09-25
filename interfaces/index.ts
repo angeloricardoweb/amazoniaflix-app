@@ -1,4 +1,4 @@
-export interface VideoLite {
+export interface IVideoLite {
   id: number;
   slug: string;
   titulo: string;
@@ -14,13 +14,13 @@ export interface VideoLite {
   };
 }
 
-export interface Secao {
+export interface ISecao {
   id: number;
   titulo: string;
-  videos: VideoLite[];
+  videos: IVideoLite[];
 }
 
-export interface Video extends VideoLite {
+export interface IVideo extends IVideoLite {
   descricao: string;
   video_id: string;
   elenco: [
