@@ -14,8 +14,8 @@ export default function useFetchLoginBanner() {
 
   async function fetcher() {
     try {
-      const response = await api.get("/auth/banner");
-      setBanners(response.data.results.banners);
+      const response = await api.get("/auth/banners");
+      setBanners(response.data.results);
     } catch (error: any) {
       console.error(error.response.data);
     }
