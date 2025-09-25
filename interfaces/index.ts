@@ -2,7 +2,11 @@ export interface IVideoLite {
   id: number;
   slug: string;
   titulo: string;
-  categorias: string[];
+  categorias: {
+    id: number;
+    titulo: string;
+    slug: string;
+  }[];
   banners: {
     vertical: string;
     horizontal: string;

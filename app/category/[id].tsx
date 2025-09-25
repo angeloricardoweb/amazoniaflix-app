@@ -36,8 +36,7 @@ export default function CategoryScreen() {
         { marginLeft: index % 3 === 0 ? 0 : 10 }
       ]}
       onPress={() => {
-        // Navegar para detalhes do vídeo
-        console.log('Navigate to video:', item.slug);
+        router.push(`/video/${item.slug}`);
       }}
     >
       <View style={styles.cardImageContainer}>

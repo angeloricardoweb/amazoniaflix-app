@@ -97,7 +97,10 @@ export default function HomeScreen() {
                 />
                 <View style={styles.featuredOverlay}>
                   <View style={styles.featuredContent}>
-                    <TouchableOpacity style={styles.watchNowButton}>
+                    <TouchableOpacity 
+                      style={styles.watchNowButton}
+                      onPress={() => router.push(`/video/${getRandomVideo.slug}`)}
+                    >
                       <Ionicons name="play" size={20} color="white" />
                       <Text style={styles.watchNowText}>Assistir agora</Text>
                     </TouchableOpacity>
@@ -117,7 +120,11 @@ export default function HomeScreen() {
                 contentContainerStyle={styles.horizontalContent}
               >
                 {secao.videos.map((video, index) => (
-                  <View key={index} style={styles.movieCard}>
+                  <TouchableOpacity 
+                    key={index} 
+                    style={styles.movieCard}
+                    onPress={() => router.push(`/video/${video.slug}`)}
+                  >
                     <View style={styles.cardImageContainer}>
                       <Image
                         source={{ uri: video.banners.vertical }}
@@ -132,7 +139,7 @@ export default function HomeScreen() {
                         <Ionicons name="play" size={24} color="white" />
                       </View>
                     </View>
-                  </View>
+                  </TouchableOpacity>
                 ))}
               </ScrollView>
             </View>
