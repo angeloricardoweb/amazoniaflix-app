@@ -48,61 +48,61 @@ export default function HomeScreen() {
           </TouchableOpacity>
         </View>
         
-        {/* Categories */}
-        <ScrollView 
-          horizontal 
-          showsHorizontalScrollIndicator={false}
-          style={styles.categoriesContainer}
-          contentContainerStyle={styles.categoriesContent}
-        >
-          {categorias?.map((categoria) => (
-            <TouchableOpacity 
-              key={categoria.id} 
-              style={[
-                styles.categoryButton,
-                selectedCategory === categoria.id && styles.categoryButtonSelected
-              ]}
-              onPress={() => setSelectedCategory(
-                selectedCategory === categoria.id ? null : categoria.id
-              )}
-            >
-              <Text style={[
-                styles.categoryText,
-                selectedCategory === categoria.id && styles.categoryTextSelected
-              ]}>
-                {categoria.titulo}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
-        
-        {/* Featured Video Card */}
-        {getRandomVideo && (
-          <View style={styles.featuredCard}>
-            <View style={styles.featuredImageContainer}>
-              <Image
-                source={{ uri: getRandomVideo.banners.horizontal }}
-                style={styles.featuredImage}
-                resizeMode="cover"
-                blurRadius={0}
-                defaultSource={require('@/assets/images/icon.png')}
-                fadeDuration={0}
-                loadingIndicatorSource={require('@/assets/images/icon.png')}
-              />
-              <View style={styles.featuredOverlay}>
-                <View style={styles.featuredContent}>
-                  <TouchableOpacity style={styles.watchNowButton}>
-                    <Ionicons name="play" size={20} color="white" />
-                    <Text style={styles.watchNowText}>Assistir agora</Text>
-                  </TouchableOpacity>
+        {/* Scrollable Content */}
+        <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
+          {/* Categories */}
+          <ScrollView 
+            horizontal 
+            showsHorizontalScrollIndicator={false}
+            style={styles.categoriesContainer}
+            contentContainerStyle={styles.categoriesContent}
+          >
+            {categorias?.map((categoria) => (
+              <TouchableOpacity 
+                key={categoria.id} 
+                style={[
+                  styles.categoryButton,
+                  selectedCategory === categoria.id && styles.categoryButtonSelected
+                ]}
+                onPress={() => setSelectedCategory(
+                  selectedCategory === categoria.id ? null : categoria.id
+                )}
+              >
+                <Text style={[
+                  styles.categoryText,
+                  selectedCategory === categoria.id && styles.categoryTextSelected
+                ]}>
+                  {categoria.titulo}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+          
+          {/* Featured Video Card */}
+          {getRandomVideo && (
+            <View style={styles.featuredCard}>
+              <View style={styles.featuredImageContainer}>
+                <Image
+                  source={{ uri: getRandomVideo.banners.horizontal }}
+                  style={styles.featuredImage}
+                  resizeMode="cover"
+                  blurRadius={0}
+                  defaultSource={require('@/assets/images/icon.png')}
+                  fadeDuration={0}
+                  loadingIndicatorSource={require('@/assets/images/icon.png')}
+                />
+                <View style={styles.featuredOverlay}>
+                  <View style={styles.featuredContent}>
+                    <TouchableOpacity style={styles.watchNowButton}>
+                      <Ionicons name="play" size={20} color="white" />
+                      <Text style={styles.watchNowText}>Assistir agora</Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
               </View>
             </View>
-          </View>
-        )}
-
-        {/* Content */}
-        <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+          )}
+          {/* Content Sections */}
           {data?.map((secao) => (
             <View key={secao.id} style={styles.section}>
               <Text style={styles.sectionTitle}>{secao.titulo}</Text>
@@ -128,14 +128,6 @@ export default function HomeScreen() {
                         <Ionicons name="play" size={24} color="white" />
                       </View>
                     </View>
-                    {/* <View style={styles.cardActions}>
-                      <TouchableOpacity style={styles.actionButton}>
-                        <Ionicons name="information-circle-outline" size={20} color="white" />
-                      </TouchableOpacity>
-                      <TouchableOpacity style={styles.actionButton}>
-                        <Ionicons name="ellipsis-horizontal" size={20} color="white" />
-                      </TouchableOpacity>
-                    </View> */}
                   </View>
                 ))}
               </ScrollView>
@@ -151,7 +143,6 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 50, // Safe area
   },
   header: {
     flexDirection: 'row',
@@ -159,6 +150,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
     paddingVertical: 15,
+    paddingTop: 50, // Safe area
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 1000,
+  },
+  scrollContainer: {
+    flex: 1,
+    paddingTop: 100, // Space for fixed header
   },
   searchButton: {
     width: 40,
@@ -251,12 +253,10 @@ const styles = StyleSheet.create({
   watchNowButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
     paddingHorizontal: 24,
     paddingVertical: 12,
     borderRadius: 8,
-    borderWidth: 1,
-    borderColor: 'white',
     gap: 8,
   },
   watchNowText: {
@@ -264,12 +264,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
-  content: {
-    flex: 1,
-    paddingHorizontal: 20,
-  },
   section: {
     marginBottom: 30,
+    paddingHorizontal: 20,
   },
   sectionTitle: {
     fontSize: 18,
