@@ -20,6 +20,7 @@ const CARD_HEIGHT = CARD_WIDTH * 1.5;
 
 export default function HomeScreen() {
   const { data } = useFetchHomeVideos();
+
   return (
     <LayoutBackground>
       <View style={styles.container}>
@@ -63,14 +64,14 @@ export default function HomeScreen() {
                         <Ionicons name="play" size={24} color="white" />
                       </View>
                     </View>
-                    <View style={styles.cardActions}>
+                    {/* <View style={styles.cardActions}>
                       <TouchableOpacity style={styles.actionButton}>
                         <Ionicons name="information-circle-outline" size={20} color="white" />
                       </TouchableOpacity>
                       <TouchableOpacity style={styles.actionButton}>
                         <Ionicons name="ellipsis-horizontal" size={20} color="white" />
                       </TouchableOpacity>
-                    </View>
+                    </View> */}
                   </View>
                 ))}
               </ScrollView>
