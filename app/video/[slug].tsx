@@ -24,6 +24,10 @@ export default function VideoDetailsScreen() {
     const { slug } = useLocalSearchParams();
     const [activeTab, setActiveTab] = useState<'sinopse' | 'elenco'>('sinopse');
 
+    const handlePlayVideo = () => {
+        router.push(`/player/${slug}`);
+    };
+
     // Usar o hook para buscar detalhes do vídeo
     const { data: videoDetails } = useFetchVideoDetails({
         slug: slug as string
@@ -93,7 +97,10 @@ export default function VideoDetailsScreen() {
                                     </View>
                                     <Text style={styles.duration}>{videoDetails.duracao}</Text>
                                 </View>
-                                <TouchableOpacity style={styles.playButton}>
+                                <TouchableOpacity 
+                                    style={styles.playButton}
+                                    onPress={handlePlayVideo}
+                                >
                                     <Ionicons name="play" size={20} color="white" />
                                     <Text style={styles.playButtonText}>Assistir agora</Text>
                                 </TouchableOpacity>
