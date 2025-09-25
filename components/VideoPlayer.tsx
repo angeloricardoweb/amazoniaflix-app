@@ -33,6 +33,8 @@ export default function VideoPlayer({
 }: VideoPlayerProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
 
   const player = useVideoPlayer(videoSource, (player) => {
     player.loop = loop;
@@ -46,6 +48,16 @@ export default function VideoPlayer({
   const statusChangeEvent = useEvent(player, 'statusChange', { status: player.status, error: player.status === 'error' ? { message: 'Unknown error' } : undefined });
   const status = statusChangeEvent?.status;
   const error = statusChangeEvent?.error;
+
+  // Listen to time updates
+  React.useEffect(() => {
+    const subscription = player.addListener('timeUpdate', ({ currentTime: time }) => {
+      setCurrentTime(time);
+      setDuration(player.duration);
+    });
+
+    return () => subscription.remove();
+  }, [player]);
 
   // Handle status changes
   React.useEffect(() => {
@@ -105,6 +117,22 @@ export default function VideoPlayer({
     }
   };
 
+  const handleSeekBackward = () => {
+    const newTime = Math.max(0, currentTime - 5);
+    player.currentTime = newTime;
+  };
+
+  const handleSeekForward = () => {
+    const newTime = Math.min(duration, currentTime + 5);
+    player.currentTime = newTime;
+  };
+
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
   if (hasError) {
     return (
       <View style={[styles.container, style]}>
@@ -146,19 +174,70 @@ export default function VideoPlayer({
       )}
 
       {showControls && !isLoading && (
-        <View style={styles.controlsOverlay}>
+        <>
+          {/* Área central clicável (invisível) */}
           <TouchableOpacity
-            style={styles.playButton}
+            style={styles.centerClickArea}
             onPress={togglePlayPause}
-            activeOpacity={0.7}
-          >
-            <Ionicons
-              name={isPlaying ? 'pause' : 'play'}
-              size={32}
-              color="white"
-            />
-          </TouchableOpacity>
-        </View>
+            activeOpacity={1}
+          />
+          
+          {/* Controles na parte inferior */}
+          <View style={styles.bottomControls}>
+            {/* Botão Play/Pause no canto esquerdo */}
+            <TouchableOpacity
+              style={styles.playButton}
+              onPress={togglePlayPause}
+              activeOpacity={0.7}
+            >
+              <Ionicons
+                name={isPlaying ? 'pause' : 'play'}
+                size={20}
+                color="white"
+              />
+            </TouchableOpacity>
+
+            {/* Controles centrais */}
+            <View style={styles.centerControls}>
+              {/* Botão retroceder 5s */}
+              <TouchableOpacity
+                style={styles.seekButton}
+                onPress={handleSeekBackward}
+                activeOpacity={0.7}
+              >
+                <Ionicons name="play-back" size={20} color="white" />
+              </TouchableOpacity>
+
+              {/* Barra de progresso */}
+              <View style={styles.progressContainer}>
+                <View style={styles.progressBar}>
+                  <View 
+                    style={[
+                      styles.progressFill, 
+                      { width: duration > 0 ? `${(currentTime / duration) * 100}%` : '0%' }
+                    ]} 
+                  />
+                </View>
+              </View>
+
+              {/* Botão avançar 5s */}
+              <TouchableOpacity
+                style={styles.seekButton}
+                onPress={handleSeekForward}
+                activeOpacity={0.7}
+              >
+                <Ionicons name="play-forward" size={20} color="white" />
+              </TouchableOpacity>
+            </View>
+
+            {/* Tempo no canto direito */}
+            <View style={styles.timeContainer}>
+              <Text style={styles.timeText}>
+                {formatTime(currentTime)} / {formatTime(duration)}
+              </Text>
+            </View>
+          </View>
+        </>
       )}
     </View>
   );
@@ -192,26 +271,70 @@ const styles = StyleSheet.create({
     marginTop: 10,
     fontWeight: '500',
   },
-  controlsOverlay: {
+  centerClickArea: {
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
     zIndex: 5,
   },
+  bottomControls: {
+    position: 'absolute',
+    bottom: 20,
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    zIndex: 10,
+  },
   playButton: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: 2,
-    borderColor: 'rgba(255, 255, 255, 0.3)',
+    marginRight: 15,
+  },
+  centerControls: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  seekButton: {
+    width: 35,
+    height: 35,
+    borderRadius: 17.5,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginHorizontal: 8,
+  },
+  progressContainer: {
+    flex: 1,
+    marginHorizontal: 15,
+  },
+  progressBar: {
+    height: 4,
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    borderRadius: 2,
+    overflow: 'hidden',
+  },
+  progressFill: {
+    height: '100%',
+    backgroundColor: '#ff6b6b',
+    borderRadius: 2,
+  },
+  timeContainer: {
+    marginLeft: 15,
+  },
+  timeText: {
+    color: 'white',
+    fontSize: 12,
+    fontWeight: '500',
   },
   errorContainer: {
     flex: 1,
