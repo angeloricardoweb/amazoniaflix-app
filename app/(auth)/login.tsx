@@ -97,10 +97,11 @@ export default function LoginScreen() {
       const { data } = await api.post('/auth/login', { email, password });
 
       await setToken(data.results.token);
+      
       Notifier.showNotification({
         title: 'Login realizado com sucesso!',
         description: 'Você está sendo redirecionado para a home.',
-        duration: 0,
+        duration: 2500,
         showAnimationDuration: 800,
         showEasing: Easing.bounce,
         hideOnPress: false,
