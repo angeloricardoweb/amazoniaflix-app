@@ -2,7 +2,6 @@ import Logo from '@/components/Logo';
 import Button from '@/components/ui/button';
 import Input from '@/components/ui/input';
 import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
 import { api } from '@/services/axios';
 import { setToken } from '@/storage/token';
 import { router } from 'expo-router';
@@ -29,8 +28,6 @@ export default function LoginScreen() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const colorScheme = useColorScheme();
-  const colors = Colors[colorScheme ?? 'light'];
 
   const { banner } = useFetchLoginBanner();
 
@@ -125,7 +122,7 @@ export default function LoginScreen() {
   return (
     <LayoutBackground>
       <View style={[styles.container]}>
-        <StatusBar style="light" backgroundColor={colors.tint} />
+        <StatusBar style="light" backgroundColor={Colors.tint} />
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           style={styles.keyboardAvoidingView}>
@@ -134,7 +131,7 @@ export default function LoginScreen() {
             <Animated.View style={[
               styles.banner,
               {
-                backgroundColor: colors.tint,
+                backgroundColor: Colors.tint,
                 height: bannerHeight.interpolate({
                   inputRange: [0, 1],
                   outputRange: [0, 375], // Altura máxima do banner

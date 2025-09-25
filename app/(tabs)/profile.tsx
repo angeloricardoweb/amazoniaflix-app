@@ -1,15 +1,12 @@
 import DrawerModal from '@/components/DrawerModal';
 import ParallaxLayout from '@/components/ParallaxLayout';
 import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React, { useState } from 'react';
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 export default function ProfileScreen() {
-  const colorScheme = useColorScheme();
-  const colors = Colors[colorScheme ?? 'light'];
   const [drawerVisible, setDrawerVisible] = useState(false);
 
   const handleLogout = () => {
@@ -76,17 +73,17 @@ export default function ProfileScreen() {
   ];
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
+    <View style={[styles.container, { backgroundColor: Colors.background }]}>
       <ParallaxLayout>
         {/* Header do Perfil */}
         <View style={styles.profileHeader}>
           <View style={styles.avatarContainer}>
-            <View style={[styles.avatar, { backgroundColor: colors.tint }]}>
+            <View style={[styles.avatar, { backgroundColor: Colors.tint }]}>
               <Ionicons name="person" size={40} color="white" />
             </View>
           </View>
-          <Text style={[styles.userName, { color: colors.text }]}>Usuário</Text>
-          <Text style={[styles.userEmail, { color: colors.tabIconDefault }]}>usuario@email.com</Text>
+          <Text style={[styles.userName, { color: Colors.text }]}>Usuário</Text>
+          <Text style={[styles.userEmail, { color: Colors.tabIconDefault }]}>usuario@email.com</Text>
         </View>
 
         {/* Opções do Perfil */}
@@ -94,7 +91,7 @@ export default function ProfileScreen() {
           {profileOptions.map((option, index) => (
             <TouchableOpacity
               key={index}
-              style={[styles.optionItem, { borderBottomColor: colors.border }]}
+              style={[styles.optionItem, { borderBottomColor: Colors.border }]}
               onPress={option.onPress}
               activeOpacity={0.7}
             >
@@ -102,17 +99,17 @@ export default function ProfileScreen() {
                 <Ionicons
                   name={option.icon as any}
                   size={24}
-                  color={colors.text}
+                  color={Colors.text}
                   style={styles.optionIcon}
                 />
-                <Text style={[styles.optionText, { color: colors.text }]}>
+                <Text style={[styles.optionText, { color: Colors.text }]}>
                   {option.title}
                 </Text>
               </View>
               <Ionicons
                 name="chevron-forward"
                 size={20}
-                color={colors.tabIconDefault}
+                color={Colors.tabIconDefault}
               />
             </TouchableOpacity>
           ))}

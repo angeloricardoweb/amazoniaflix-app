@@ -1,5 +1,4 @@
 import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
 import React from 'react';
 import {
     ActivityIndicator,
@@ -31,8 +30,6 @@ export default function Button({
   style,
   textStyle,
 }: ButtonProps) {
-  const colorScheme = useColorScheme();
-  const colors = Colors[colorScheme ?? 'light'];
 
   const getButtonStyle = (): ViewStyle => {
     const baseStyle: ViewStyle = {
@@ -64,18 +61,18 @@ export default function Button({
     // Variant styles
     const variantStyles: Record<string, ViewStyle> = {
       primary: {
-        backgroundColor: colors.tint,
+        backgroundColor: Colors.tint,
         borderWidth: 0,
       },
       secondary: {
-        backgroundColor: colors.background,
+        backgroundColor: Colors.background,
         borderWidth: 1,
-        borderColor: colors.border,
+        borderColor: Colors.border,
       },
       outline: {
         backgroundColor: 'transparent',
         borderWidth: 2,
-        borderColor: colors.tint,
+        borderColor: Colors.tint,
       },
       ghost: {
         backgroundColor: 'transparent',
@@ -124,13 +121,13 @@ export default function Button({
         color: 'white',
       },
       secondary: {
-        color: colors.text,
+        color: Colors.text,
       },
       outline: {
-        color: colors.tint,
+        color: Colors.tint,
       },
       ghost: {
-        color: colors.tint,
+        color: Colors.tint,
       },
     };
 
@@ -151,7 +148,7 @@ export default function Button({
       {loading && (
         <ActivityIndicator
           size="small"
-          color={variant === 'primary' ? 'white' : colors.tint}
+          color={variant === 'primary' ? 'white' : Colors.tint}
           style={styles.loader}
         />
       )}

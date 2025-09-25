@@ -1,5 +1,4 @@
 import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
@@ -9,13 +8,11 @@ interface FloatingMenuButtonProps {
 }
 
 export default function FloatingMenuButton({ onPress }: FloatingMenuButtonProps) {
-  const colorScheme = useColorScheme();
-  const colors = Colors[colorScheme ?? 'light'];
 
   return (
     <View style={styles.container}>
       <TouchableOpacity
-        style={[styles.button, { backgroundColor: colors.tint }]}
+        style={[styles.button, { backgroundColor: Colors.tint }]}
         onPress={onPress}
         activeOpacity={0.8}
       >

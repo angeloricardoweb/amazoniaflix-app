@@ -1,14 +1,11 @@
 import DrawerModal from '@/components/DrawerModal';
 import ParallaxLayout from '@/components/ParallaxLayout';
 import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 export default function MenuScreen() {
-  const colorScheme = useColorScheme();
-  const colors = Colors[colorScheme ?? 'light'];
   const [drawerVisible, setDrawerVisible] = useState(false);
 
   const menuCategories = [
@@ -95,25 +92,25 @@ export default function MenuScreen() {
   ];
 
   return (
-    <View style={[styles.container]}>
+    <View style={[styles.container, { backgroundColor: Colors.background }]}>
       <ParallaxLayout>
         {/* Header do Menu */}
         <View style={styles.menuHeader}>
-          <Text style={[styles.headerTitle, { color: colors.text }]}>Menu</Text>
-          <Text style={[styles.headerSubtitle, { color: colors.tabIconDefault }]}>Explore nosso conteúdo</Text>
+          <Text style={[styles.headerTitle, { color: Colors.text }]}>Menu</Text>
+          <Text style={[styles.headerSubtitle, { color: Colors.tabIconDefault }]}>Explore nosso conteúdo</Text>
         </View>
 
         {/* Categorias do Menu */}
         {menuCategories.map((category, categoryIndex) => (
           <View key={categoryIndex} style={styles.categoryContainer}>
-            <Text style={[styles.categoryTitle, { color: colors.text }]}>
+            <Text style={[styles.categoryTitle, { color: Colors.text }]}>
               {category.title}
             </Text>
 
             {category.items.map((item, itemIndex) => (
               <TouchableOpacity
                 key={itemIndex}
-                style={[styles.menuItem, { borderBottomColor: colors.border }]}
+                style={[styles.menuItem, { borderBottomColor: Colors.border }]}
                 onPress={item.onPress}
                 activeOpacity={0.7}
               >
@@ -121,17 +118,17 @@ export default function MenuScreen() {
                   <Ionicons
                     name={item.icon as any}
                     size={24}
-                    color={colors.text}
+                    color={Colors.text}
                     style={styles.menuItemIcon}
                   />
-                  <Text style={[styles.menuItemText, { color: colors.text }]}>
+                  <Text style={[styles.menuItemText, { color: Colors.text }]}>
                     {item.title}
                   </Text>
                 </View>
                 <Ionicons
                   name="chevron-forward"
                   size={20}
-                  color={colors.tabIconDefault}
+                  color={Colors.tabIconDefault}
                 />
               </TouchableOpacity>
             ))}
@@ -139,11 +136,11 @@ export default function MenuScreen() {
         ))}
 
         {/* Informações da App */}
-        <View style={[styles.appInfo, { borderTopColor: colors.border }]}>
-          <Text style={[styles.appInfoText, { color: colors.tabIconDefault }]}>
+        <View style={[styles.appInfo, { borderTopColor: Colors.border }]}>
+          <Text style={[styles.appInfoText, { color: Colors.tabIconDefault }]}>
             AmazoniaFlix v1.0.0
           </Text>
-          <Text style={[styles.appInfoText, { color: colors.tabIconDefault }]}>
+          <Text style={[styles.appInfoText, { color: Colors.tabIconDefault }]}>
             Sua plataforma de streaming favorita
           </Text>
         </View>

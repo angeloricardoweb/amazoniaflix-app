@@ -39,9 +39,6 @@ export default function Input({
   ...props
 }: InputProps) {
   const [isFocused, setIsFocused] = useState(false);
-  // const colorScheme = useColorScheme();
-  const colorScheme = 'dark';
-  const colors = Colors[colorScheme ?? 'light'];
 
   const getContainerStyle = (): ViewStyle => {
     const baseStyle: ViewStyle = {
@@ -84,17 +81,17 @@ export default function Input({
     // Variant styles
     const variantStyles: Record<string, ViewStyle> = {
       default: {
-        backgroundColor: colors.background,
-        borderColor: isFocused ? colors.tint : colors.border,
+        backgroundColor: Colors.background,
+        borderColor: isFocused ? Colors.tint : Colors.border,
         borderWidth: 1,
       },
       filled: {
-        backgroundColor: colors.border,
+        backgroundColor: Colors.border,
         borderColor: 'transparent',
       },
       outlined: {
         backgroundColor: 'transparent',
-        borderColor: isFocused ? colors.tint : colors.border,
+        borderColor: isFocused ? Colors.tint : Colors.border,
         borderWidth: 2,
       },
     };
@@ -117,7 +114,7 @@ export default function Input({
   const getInputStyle = (): TextStyle => {
     const baseStyle: TextStyle = {
       flex: 1,
-      color: colors.text,
+      color: Colors.text,
     };
 
     // Size text styles
@@ -136,7 +133,7 @@ export default function Input({
     return {
       ...baseStyle,
       ...sizeTextStyles[size],
-      ...(style && typeof style === 'object' ? style : {}),
+      ...(style && typeof style === 'object' && !Array.isArray(style) ? style : {}),
     };
   };
 
@@ -146,7 +143,7 @@ export default function Input({
       fontWeight: '600',
       fontFamily: 'OpenSans',
       marginBottom: 8,
-      color: colors.text,
+      color: Colors.text,
     };
 
     return {
@@ -177,7 +174,7 @@ export default function Input({
         
         <TextInput
           style={getInputStyle()}
-          placeholderTextColor={colors.tabIconDefault}
+          placeholderTextColor={Colors.tabIconDefault}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           {...props}

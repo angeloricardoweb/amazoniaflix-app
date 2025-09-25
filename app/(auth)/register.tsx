@@ -89,10 +89,10 @@ export default function RegisterScreen() {
               <Title>
                 Criar Conta
               </Title>
-              <Text style={{ color: Colors.dark.text, fontSize: 16, fontWeight: 'bold', marginTop: 8 }}>
+              <Text style={{ color: Colors.text, fontSize: 16, fontWeight: 'bold', marginTop: 8 }}>
                 Comece agora mesmo
               </Text>
-              <Text style={{ color: Colors.dark.text, fontSize: 16 }}>
+              <Text style={{ color: Colors.text, fontSize: 16 }}>
                 Crie sua conta e assista todos os filmes
               </Text>
             </View>

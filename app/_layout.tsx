@@ -1,4 +1,4 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { DarkTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
@@ -10,8 +10,6 @@ import 'react-native-reanimated';
 import { getToken } from '@/storage/token';
 
 export default function RootLayout() {
-  // const colorScheme = useColorScheme();
-  const colorScheme = 'dark';
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
@@ -43,7 +41,7 @@ export default function RootLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ThemeProvider
-        value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
+        value={DarkTheme}
       >
         <NotifierWrapper>
           <Stack

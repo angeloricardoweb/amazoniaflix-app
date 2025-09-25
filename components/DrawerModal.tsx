@@ -1,5 +1,4 @@
 import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React, { useEffect } from 'react';
@@ -27,8 +26,6 @@ interface DrawerModalProps {
 const { width } = Dimensions.get('window');
 
 export default function DrawerModal({ visible, onClose }: DrawerModalProps) {
-  const colorScheme = useColorScheme();
-  const colors = Colors[colorScheme ?? 'light'];
   
   const translateX = useSharedValue(width * 0.8);
   const opacity = useSharedValue(0);
@@ -76,7 +73,7 @@ export default function DrawerModal({ visible, onClose }: DrawerModalProps) {
       icon: 'search-outline',
       onPress: () => {
         onClose();
-        router.push('/(tabs)/explore');
+        router.push('/(tabs)/menu');
       },
     },
     {
@@ -122,9 +119,9 @@ export default function DrawerModal({ visible, onClose }: DrawerModalProps) {
           />
         </Animated.View>
         
-        <Animated.View style={[styles.drawer, { backgroundColor: colors.background }, drawerAnimatedStyle]}>
+        <Animated.View style={[styles.drawer, { backgroundColor: Colors.background }, drawerAnimatedStyle]}>
           {/* Header do Drawer */}
-          <View style={[styles.header, { backgroundColor: colors.tint }]}>
+          <View style={[styles.header, { backgroundColor: Colors.tint }]}>
             <Text style={styles.headerTitle}>AmazoniaFlix</Text>
             <Text style={styles.headerSubtitle}>Menu</Text>
             <TouchableOpacity
@@ -141,17 +138,17 @@ export default function DrawerModal({ visible, onClose }: DrawerModalProps) {
             {menuItems.map((item, index) => (
               <TouchableOpacity
                 key={index}
-                style={[styles.menuItem, { borderBottomColor: colors.border }]}
+                style={[styles.menuItem, { borderBottomColor: Colors.border }]}
                 onPress={item.onPress}
                 activeOpacity={0.7}
               >
                 <Ionicons
                   name={item.icon as any}
                   size={24}
-                  color={colors.text}
+                  color={Colors.text}
                   style={styles.menuIcon}
                 />
-                <Text style={[styles.menuText, { color: colors.text }]}>
+                <Text style={[styles.menuText, { color: Colors.text }]}>
                   {item.title}
                 </Text>
               </TouchableOpacity>
@@ -159,8 +156,8 @@ export default function DrawerModal({ visible, onClose }: DrawerModalProps) {
           </ScrollView>
 
           {/* Footer */}
-          <View style={[styles.footer, { borderTopColor: colors.border }]}>
-            <Text style={[styles.footerText, { color: colors.tabIconDefault }]}>
+          <View style={[styles.footer, { borderTopColor: Colors.border }]}>
+            <Text style={[styles.footerText, { color: Colors.tabIconDefault }]}>
               AmazoniaFlix v1.0.0
             </Text>
           </View>
