@@ -4,6 +4,7 @@ import { Colors } from '@/constants/theme';
 import useFetchCategorias from '@/hooks/useFetchCategorias';
 import useFetchHomeVideos from '@/hooks/useFetchHomeVideos';
 import { Ionicons } from '@expo/vector-icons';
+import { router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import {
@@ -64,9 +65,12 @@ export default function HomeScreen() {
                   styles.categoryButton,
                   selectedCategory === categoria.id && styles.categoryButtonSelected
                 ]}
-                onPress={() => setSelectedCategory(
+              onPress={() => {
+                setSelectedCategory(
                   selectedCategory === categoria.id ? null : categoria.id
-                )}
+                );
+                router.push(`/category/${categoria.id}`);
+              }}
               >
                 <Text style={[
                   styles.categoryText,
