@@ -2,13 +2,13 @@ import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React from 'react';
 import {
-    Dimensions,
-    Image,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  Dimensions,
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 
 const { width } = Dimensions.get('window');
@@ -28,11 +28,11 @@ interface Video {
     cor: string;
   };
   duracao?: string;
-  categorias?: Array<{
+  categorias?: {
     id: number;
     titulo: string;
     slug: string;
-  }>;
+  }[];
 }
 
 interface VideoListProps {
@@ -54,7 +54,7 @@ export default function VideoList({
 
   const renderVideoCard = (video: Video, index: number) => (
     <TouchableOpacity 
-      key={video.id} 
+      key={index} 
       style={[
         styles.movieCard,
         horizontal ? styles.horizontalCard : styles.verticalCard,
