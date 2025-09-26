@@ -41,3 +41,11 @@ export interface ICategoria {
   titulo: string;
   slug: string;
 }
+
+export interface IMe {
+  id: number;
+  nome: string;
+  email: string;
+  telefone: string;
+  avatar_url: string;
+}
