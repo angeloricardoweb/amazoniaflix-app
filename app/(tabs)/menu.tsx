@@ -1,95 +1,30 @@
 import DrawerModal from '@/components/DrawerModal';
 import ParallaxLayout from '@/components/ParallaxLayout';
 import { Colors } from '@/constants/theme';
+import useFetchCategorias from '@/hooks/useFetchCategorias';
 import { Ionicons } from '@expo/vector-icons';
+import { router } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
+} from 'react-native';
 
 export default function MenuScreen() {
   const [drawerVisible, setDrawerVisible] = useState(false);
+  const { data: categorias } = useFetchCategorias();
 
-  const menuCategories = [
-    {
-      title: 'Categorias',
-      items: [
-        {
-          title: 'Ação',
-          icon: 'flash-outline',
-          onPress: () => Alert.alert('Em breve', 'Categoria Ação em desenvolvimento'),
-        },
-        {
-          title: 'Comédia',
-          icon: 'happy-outline',
-          onPress: () => Alert.alert('Em breve', 'Categoria Comédia em desenvolvimento'),
-        },
-        {
-          title: 'Drama',
-          icon: 'film-outline',
-          onPress: () => Alert.alert('Em breve', 'Categoria Drama em desenvolvimento'),
-        },
-        {
-          title: 'Terror',
-          icon: 'skull-outline',
-          onPress: () => Alert.alert('Em breve', 'Categoria Terror em desenvolvimento'),
-        },
-        {
-          title: 'Romance',
-          icon: 'heart-outline',
-          onPress: () => Alert.alert('Em breve', 'Categoria Romance em desenvolvimento'),
-        },
-      ],
-    },
-    {
-      title: 'Conteúdo',
-      items: [
-        {
-          title: 'Filmes',
-          icon: 'videocam-outline',
-          onPress: () => Alert.alert('Em breve', 'Seção de Filmes em desenvolvimento'),
-        },
-        {
-          title: 'Séries',
-          icon: 'tv-outline',
-          onPress: () => Alert.alert('Em breve', 'Seção de Séries em desenvolvimento'),
-        },
-        {
-          title: 'Documentários',
-          icon: 'library-outline',
-          onPress: () => Alert.alert('Em breve', 'Seção de Documentários em desenvolvimento'),
-        },
-        {
-          title: 'Animes',
-          icon: 'color-palette-outline',
-          onPress: () => Alert.alert('Em breve', 'Seção de Animes em desenvolvimento'),
-        },
-      ],
-    },
-    {
-      title: 'Recursos',
-      items: [
-        {
-          title: 'Buscar',
-          icon: 'search-outline',
-          onPress: () => Alert.alert('Em breve', 'Funcionalidade de busca em desenvolvimento'),
-        },
-        {
-          title: 'Recomendações',
-          icon: 'star-outline',
-          onPress: () => Alert.alert('Em breve', 'Recomendações em desenvolvimento'),
-        },
-        {
-          title: 'Top 10',
-          icon: 'trophy-outline',
-          onPress: () => Alert.alert('Em breve', 'Top 10 em desenvolvimento'),
-        },
-        {
-          title: 'Lançamentos',
-          icon: 'calendar-outline',
-          onPress: () => Alert.alert('Em breve', 'Lançamentos em desenvolvimento'),
-        },
-      ],
-    },
-  ];
+  const handleSearch = () => {
+    router.push('/search');
+  };
+
+  const handleCategoryPress = (categoria: any) => {
+    router.push(`/category/${categoria.slug}`);
+  };
 
   return (
     <View style={[styles.container, { backgroundColor: Colors.background }]}>
@@ -100,29 +35,75 @@ export default function MenuScreen() {
           <Text style={[styles.headerSubtitle, { color: Colors.tabIconDefault }]}>Explore nosso conteúdo</Text>
         </View>
 
-        {/* Categorias do Menu */}
-        {menuCategories.map((category, categoryIndex) => (
-          <View key={categoryIndex} style={styles.categoryContainer}>
-            <Text style={[styles.categoryTitle, { color: Colors.text }]}>
-              {category.title}
-            </Text>
+        {/* Busca */}
+        <View style={styles.categoryContainer}>
+          <Text style={[styles.categoryTitle, { color: Colors.text }]}>
+            Busca
+          </Text>
+          <TouchableOpacity
+            style={[styles.menuItem, { borderBottomColor: Colors.border }]}
+            onPress={handleSearch}
+            activeOpacity={0.7}
+          >
+            <View style={styles.menuItemLeft}>
+              <Ionicons
+                name="search-outline"
+                size={24}
+                color={Colors.text}
+                style={styles.menuItemIcon}
+              />
+              <Text style={[styles.menuItemText, { color: Colors.text }]}>
+                Buscar Conteúdo
+              </Text>
+            </View>
+            <Ionicons
+              name="chevron-forward"
+              size={20}
+              color={Colors.tabIconDefault}
+            />
+          </TouchableOpacity>
+        </View>
 
-            {category.items.map((item, itemIndex) => (
+        {/* Categorias */}
+        <View style={styles.categoryContainer}>
+          <Text style={[styles.categoryTitle, { color: Colors.text }]}>
+            Categorias
+          </Text>
+
+          {!categorias ? (
+            <View style={styles.loadingContainer}>
+              <ActivityIndicator size="small" color={Colors.tint} />
+              <Text style={[styles.loadingText, { color: Colors.tabIconDefault }]}>
+                Carregando categorias...
+              </Text>
+            </View>
+          ) : categorias.length === 0 ? (
+            <View style={styles.emptyContainer}>
+              <Text style={[styles.emptyText, { color: Colors.tabIconDefault }]}>
+                Nenhuma categoria disponível
+              </Text>
+            </View>
+          ) : (
+            categorias.map((categoria, index) => (
               <TouchableOpacity
-                key={itemIndex}
-                style={[styles.menuItem, { borderBottomColor: Colors.border }]}
-                onPress={item.onPress}
+                key={categoria.id}
+                style={[
+                  styles.menuItem,
+                  { borderBottomColor: Colors.border },
+                  index === categorias.length - 1 && styles.lastMenuItem
+                ]}
+                onPress={() => handleCategoryPress(categoria)}
                 activeOpacity={0.7}
               >
                 <View style={styles.menuItemLeft}>
                   <Ionicons
-                    name={item.icon as any}
+                    name="folder-outline"
                     size={24}
                     color={Colors.text}
                     style={styles.menuItemIcon}
                   />
                   <Text style={[styles.menuItemText, { color: Colors.text }]}>
-                    {item.title}
+                    {categoria.titulo}
                   </Text>
                 </View>
                 <Ionicons
@@ -131,9 +112,9 @@ export default function MenuScreen() {
                   color={Colors.tabIconDefault}
                 />
               </TouchableOpacity>
-            ))}
-          </View>
-        ))}
+            ))
+          )}
+        </View>
 
         {/* Informações da App */}
         <View style={[styles.appInfo, { borderTopColor: Colors.border }]}>
@@ -145,7 +126,7 @@ export default function MenuScreen() {
           </Text>
         </View>
       </ParallaxLayout>
-
+      <StatusBar style="light" />
       <DrawerModal
         visible={drawerVisible}
         onClose={() => setDrawerVisible(false)}
@@ -211,5 +192,25 @@ const styles = StyleSheet.create({
   appInfoText: {
     fontSize: 14,
     marginBottom: 4,
+  },
+  loadingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 20,
+  },
+  loadingText: {
+    fontSize: 14,
+    marginLeft: 8,
+  },
+  emptyContainer: {
+    alignItems: 'center',
+    paddingVertical: 20,
+  },
+  emptyText: {
+    fontSize: 14,
+  },
+  lastMenuItem: {
+    borderBottomWidth: 0,
   },
 });
