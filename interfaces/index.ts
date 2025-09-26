@@ -49,3 +49,8 @@ export interface IMe {
   telefone: string;
   avatar_url: string;
 }
+
+export interface IAvatar {
+  id: number;
+  avatar_url: string;
+}
