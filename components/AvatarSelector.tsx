@@ -1,6 +1,9 @@
+import useFetchAvatars from '@/hooks/useFetchAvatars';
+import { IAvatar } from '@/interfaces';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import {
+  ActivityIndicator,
   Image,
   StyleSheet,
   Text,
@@ -13,75 +16,25 @@ interface AvatarSelectorProps {
   onAvatarSelect: (avatarUrl: string) => void;
 }
 
-// Lista de avatares disponíveis
-const AVATAR_OPTIONS = [
-  {
-    id: 'avatar1',
-    name: 'Avatar 1',
-    url: 'https://i.pravatar.cc/150?img=1',
-  },
-  {
-    id: 'avatar2',
-    name: 'Avatar 2',
-    url: 'https://i.pravatar.cc/150?img=2',
-  },
-  {
-    id: 'avatar3',
-    name: 'Avatar 3',
-    url: 'https://i.pravatar.cc/150?img=3',
-  },
-  {
-    id: 'avatar4',
-    name: 'Avatar 4',
-    url: 'https://i.pravatar.cc/150?img=4',
-  },
-  {
-    id: 'avatar5',
-    name: 'Avatar 5',
-    url: 'https://i.pravatar.cc/150?img=5',
-  },
-  {
-    id: 'avatar6',
-    name: 'Avatar 6',
-    url: 'https://i.pravatar.cc/150?img=6',
-  },
-  {
-    id: 'avatar7',
-    name: 'Avatar 7',
-    url: 'https://i.pravatar.cc/150?img=7',
-  },
-  {
-    id: 'avatar8',
-    name: 'Avatar 8',
-    url: 'https://i.pravatar.cc/150?img=8',
-  },
-  {
-    id: 'avatar9',
-    name: 'Avatar 9',
-    url: 'https://i.pravatar.cc/150?img=9',
-  },
-  {
-    id: 'avatar10',
-    name: 'Avatar 10',
-    url: 'https://i.pravatar.cc/150?img=10',
-  },
-];
 
 export default function AvatarSelector({ selectedAvatar, onAvatarSelect }: AvatarSelectorProps) {
-  const renderAvatarItem = ({ item }: { item: typeof AVATAR_OPTIONS[0] }) => {
-    const isSelected = selectedAvatar === item.url;
+  const { data: avatars, isLoading } = useFetchAvatars();
+
+  const renderAvatarItem = (item: IAvatar) => {
+    const isSelected = selectedAvatar === item.avatar_url;
 
     return (
       <TouchableOpacity
+        key={item.id}
         style={[
           styles.avatarItem,
           isSelected && styles.avatarItemSelected
         ]}
-        onPress={() => onAvatarSelect(item.url)}
+        onPress={() => onAvatarSelect(item.avatar_url)}
         activeOpacity={0.7}
       >
         <Image
-          source={{ uri: item.url }}
+          source={{ uri: item.avatar_url }}
           style={styles.avatarImage}
           resizeMode="cover"
         />
@@ -94,11 +47,34 @@ export default function AvatarSelector({ selectedAvatar, onAvatarSelect }: Avata
     );
   };
 
+  if (isLoading) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.title}>Escolha seu Avatar</Text>
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#ff6b6b" />
+          <Text style={styles.loadingText}>Carregando avatares...</Text>
+        </View>
+      </View>
+    );
+  }
+
+  if (!avatars || avatars.length === 0) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.title}>Escolha seu Avatar</Text>
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorText}>Nenhum avatar disponível</Text>
+        </View>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Escolha seu Avatar</Text>
       <View style={styles.avatarGrid}>
-        {AVATAR_OPTIONS.map((item) => renderAvatarItem({ item }))}
+        {avatars.map((item) => renderAvatarItem(item))}
       </View>
     </View>
   );
@@ -148,5 +124,24 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.3)',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  loadingContainer: {
+    alignItems: 'center',
+    paddingVertical: 40,
+  },
+  loadingText: {
+    color: 'white',
+    fontSize: 16,
+    marginTop: 16,
+    opacity: 0.7,
+  },
+  errorContainer: {
+    alignItems: 'center',
+    paddingVertical: 40,
+  },
+  errorText: {
+    color: 'white',
+    fontSize: 16,
+    opacity: 0.7,
   },
 });
