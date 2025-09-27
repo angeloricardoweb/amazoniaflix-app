@@ -2,14 +2,14 @@ import { Tabs } from 'expo-router';
 import React from 'react';
 
 import { HapticTab } from '@/components/haptic-tab';
+import ProfileTabIcon from '@/components/ProfileTabIcon';
 import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors } from '@/constants/theme';
 
 export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors.tint,
+        tabBarActiveTintColor: '#E39846',
         headerShown: false,
         tabBarButton: HapticTab,
       }}>
@@ -25,7 +25,7 @@ export default function TabLayout() {
         name="profile"
         options={{
           title: 'Minha Conta',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="person.fill" color={color} />,
+          tabBarIcon: ({ color }) => <ProfileTabIcon size={28} color={color} />,
           headerShown: false,
         }}
       />
