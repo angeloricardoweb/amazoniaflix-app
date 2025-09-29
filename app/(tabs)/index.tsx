@@ -113,9 +113,9 @@ export default function HomeScreen() {
             </View>
           )}
           {/* Content Sections */}
-          {data?.map((secao) => (
+          {data?.map((secao, index) => (
             <VideoList
-              key={secao.id}
+              key={index}
               title={secao.titulo}
               videos={secao.videos}
               horizontal={true}
