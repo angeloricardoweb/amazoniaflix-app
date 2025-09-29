@@ -46,7 +46,7 @@ export interface IMe {
   id: number;
   nome: string;
   email: string;
-  telefone: string;
+  celular: string;
   avatar_url: string;
 }
 

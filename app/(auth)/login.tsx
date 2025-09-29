@@ -95,7 +95,7 @@ export default function LoginScreen() {
     setError('');
 
     try {
-      const { data } = await api.post('/auth/login', { email, password });
+      const { data } = await api.post('/login', { email, password });
 
       await login(data.results.token);
 

@@ -2,7 +2,7 @@ import { getToken } from '@/storage/token';
 import axios from 'axios';
 
 export const api = axios.create({
-  baseURL: 'https://api-beta-lac.vercel.app/api/amazonia-flix',
+  baseURL: 'https://amazoniaflix.com.br/api',
 });
 
 api.interceptors.request.use(

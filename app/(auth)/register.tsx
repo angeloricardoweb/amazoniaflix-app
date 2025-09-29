@@ -3,19 +3,19 @@ import Title from '@/components/ui/Title';
 import Button from '@/components/ui/button';
 import Input from '@/components/ui/input';
 import { Colors } from '@/constants/theme';
-import { api } from '@/services/axios';
+import { useRegister } from '@/hooks/useRegister';
 import { setToken } from '@/storage/token';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React, { useState } from 'react';
 import {
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View
+    KeyboardAvoidingView,
+    Platform,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -25,8 +25,9 @@ export default function RegisterScreen() {
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [loading] = useState(false);
   const [error, setError] = useState('');
+  
+  const { register, isLoading } = useRegister();
 
   // Função para aplicar máscara de telefone brasileiro
   const formatPhoneNumber = (text: string) => {
@@ -52,13 +53,48 @@ export default function RegisterScreen() {
   };
 
   const handleRegister = async () => {
-    const { data } = await api.post('/auth/register', { name, email, phone, password, confirmPassword });
+    // Validações básicas
+    if (!name.trim()) {
+      setError('Nome é obrigatório');
+      return;
+    }
+    
+    if (!email.trim()) {
+      setError('Email é obrigatório');
+      return;
+    }
+    
+    if (!phone.trim()) {
+      setError('Telefone é obrigatório');
+      return;
+    }
+    
+    if (!password.trim()) {
+      setError('Senha é obrigatória');
+      return;
+    }
+    
+    if (password !== confirmPassword) {
+      setError('As senhas não coincidem');
+      return;
+    }
 
-    if (data.error) {
-      setError(data.message[0]);
-    } else {
-      await setToken(data.results.token);
+    // Remove formatação do telefone para enviar apenas números
+    const cleanPhone = phone.replace(/\D/g, '');
+    
+    const result = await register({
+      nome: name.trim(),
+      email: email.trim(),
+      celular: cleanPhone,
+      password: password,
+      repassword: confirmPassword
+    });
+
+    if (result && !result.error) {
+      await setToken(result.results.token);
       router.replace('/(tabs)');
+    } else if (result && result.error) {
+      setError(result.message[0]);
     }
   };
 
@@ -184,8 +220,8 @@ export default function RegisterScreen() {
                 onPress={handleRegister}
                 variant="primary"
                 size="large"
-                loading={loading}
-                disabled={loading}
+                loading={isLoading}
+                disabled={isLoading}
                 style={styles.registerButton}
               />
 
