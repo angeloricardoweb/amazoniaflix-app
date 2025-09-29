@@ -11,10 +11,12 @@ export default function useFetchVideoDetails({ slug }: { slug: string }) {
 
   async function fetcher() {
     try {
+      console.log('Fetching video details for slug:', slug);
       const response = await api.get(`/videos/${slug}`);
+      console.log('Video details response:', response.data);
       setData(response.data.results);
     } catch (error: any) {
-      console.error(error.response.data);
+      console.error('Error fetching video details:', error.response?.data || error.message);
     }
   }
 

@@ -139,7 +139,7 @@ export default function LoginScreen() {
                 opacity: bannerOpacity,
               }
             ]}>
-              <Image source={banners ? { uri: banners[0].banner } : require('@/assets/images/splash.png')} style={{ width: '100%', height: '100%' }} />
+              <Image source={banners ? { uri: banners[0].banner } : require('@/assets/images/splash_bg.png')} style={{ width: '100%', height: '100%' }} />
             </Animated.View>
 
             {/* Logo */}
