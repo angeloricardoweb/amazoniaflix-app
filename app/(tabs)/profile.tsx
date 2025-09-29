@@ -1,8 +1,9 @@
 import AvatarSelector from '@/components/AvatarSelector';
 import LayoutBackground from '@/components/LayoutBackground';
 import { useAuth } from '@/contexts/AuthContext';
+import { useChangePassword } from '@/hooks/useChangePassword';
 import useFetchMe from '@/hooks/useFetchMe';
-import useUpdateProfile from '@/hooks/useUpdateProfile';
+import { useUpdateProfile } from '@/hooks/useUpdateProfile';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect, useState } from 'react';
 import {
@@ -20,79 +21,86 @@ import {
 export default function ProfileScreen() {
   const { logout } = useAuth();
   const { data: userData } = useFetchMe();
-  const { updateProfile, isLoading } = useUpdateProfile();
+  const { updateProfile, isLoading: isUpdatingProfile } = useUpdateProfile();
+  const { changePassword, isLoading: isChangingPasswordLoading } = useChangePassword();
 
   const [nome, setNome] = useState('');
   const [telefone, setTelefone] = useState('');
   const [senha, setSenha] = useState('');
-  const [confirmarSenha, setConfirmarSenha] = useState('');
   const [selectedAvatar, setSelectedAvatar] = useState<string | null>(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
 
   // Atualizar dados quando userData carregar
   useEffect(() => {
     if (userData) {
       setNome(userData.nome);
-      setTelefone(userData.telefone || '');
+      setTelefone(userData.celular || '');
       setSelectedAvatar(userData.avatar_url);
     }
   }, [userData]);
 
-  const handleSave = async () => {
+  const handleSaveProfile = async () => {
     if (!nome.trim()) {
       Alert.alert('Erro', 'Nome é obrigatório');
       return;
     }
 
-    // Validar senha se foi preenchida
-    if (senha || confirmarSenha) {
-      if (!senha.trim()) {
-        Alert.alert('Erro', 'Senha é obrigatória');
-        return;
-      }
-      if (senha !== confirmarSenha) {
-        Alert.alert('Erro', 'Senhas não coincidem');
-        return;
-      }
-      if (senha.length < 6) {
-        Alert.alert('Erro', 'Senha deve ter pelo menos 6 caracteres');
-        return;
-      }
-    }
-
     try {
-      const updateData: any = {
+      const updateData = {
         nome: nome.trim(),
         telefone: telefone.trim() || undefined,
         avatar_url: selectedAvatar || undefined,
       };
 
-      // Só incluir senha se foi preenchida
-      if (senha.trim()) {
-        updateData.senha = senha.trim();
-      }
-
-      await updateProfile(updateData);
+      const result = await updateProfile(updateData);
       
-      Alert.alert('Sucesso', 'Perfil atualizado com sucesso!');
-      setIsEditing(false);
-      // Limpar campos de senha após salvar
-      setSenha('');
-      setConfirmarSenha('');
+      if (result && !result.error) {
+        Alert.alert('Sucesso', 'Perfil atualizado com sucesso!');
+        setIsEditing(false);
+      } else if (result && result.error) {
+        Alert.alert('Erro', result.message[0]);
+      }
     } catch {
       Alert.alert('Erro', 'Não foi possível atualizar o perfil. Tente novamente.');
+    }
+  };
+
+  const handleChangePassword = async () => {
+    if (!senha.trim()) {
+      Alert.alert('Erro', 'Senha é obrigatória');
+      return;
+    }
+
+    if (senha.length < 6) {
+      Alert.alert('Erro', 'Senha deve ter pelo menos 6 caracteres');
+      return;
+    }
+
+    try {
+      const result = await changePassword({ password: senha.trim() });
+      
+      if (result && !result.error) {
+        Alert.alert('Sucesso', 'Senha alterada com sucesso!');
+        setSenha('');
+        setIsChangingPassword(false);
+      } else if (result && result.error) {
+        Alert.alert('Erro', result.message[0]);
+      }
+    } catch {
+      Alert.alert('Erro', 'Não foi possível alterar a senha. Tente novamente.');
     }
   };
 
   const handleCancel = () => {
     if (userData) {
       setNome(userData.nome);
-      setTelefone(userData.telefone || '');
+      setTelefone(userData.celular || '');
       setSelectedAvatar(userData.avatar_url);
     }
     setSenha('');
-    setConfirmarSenha('');
     setIsEditing(false);
+    setIsChangingPassword(false);
   };
 
   const handleLogout = () => {
@@ -137,7 +145,7 @@ export default function ProfileScreen() {
         {/* Header */}
         <View style={styles.header}>
           <Text style={styles.headerTitle}>Meu Perfil</Text>
-          {!isEditing ? (
+          {!isEditing && !isChangingPassword ? (
             <TouchableOpacity
               style={styles.editButton}
               onPress={() => setIsEditing(true)}
@@ -152,17 +160,19 @@ export default function ProfileScreen() {
               >
                 <Ionicons name="close" size={20} color="white" />
               </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.saveButton}
-                onPress={handleSave}
-                disabled={isLoading}
-              >
-                {isLoading ? (
-                  <ActivityIndicator size="small" color="white" />
-                ) : (
-                  <Ionicons name="checkmark" size={20} color="white" />
-                )}
-              </TouchableOpacity>
+              {isEditing && (
+                <TouchableOpacity
+                  style={styles.saveButton}
+                  onPress={handleSaveProfile}
+                  disabled={isUpdatingProfile}
+                >
+                  {isUpdatingProfile ? (
+                    <ActivityIndicator size="small" color="white" />
+                  ) : (
+                    <Ionicons name="checkmark" size={20} color="white" />
+                  )}
+                </TouchableOpacity>
+              )}
             </View>
           )}
         </View>
@@ -221,33 +231,52 @@ export default function ProfileScreen() {
             />
           </View>
 
-          {/* Senha Inputs - só aparecem no modo edição */}
-          {isEditing && (
-            <>
-              <View style={styles.inputContainer}>
-                <Text style={styles.inputLabel}>Nova Senha (opcional)</Text>
-                <TextInput
-                  style={styles.textInput}
-                  value={senha}
-                  onChangeText={setSenha}
-                  placeholder="Digite sua nova senha"
-                  placeholderTextColor="rgba(255, 255, 255, 0.5)"
-                  secureTextEntry
-                />
-              </View>
+          {/* Botão para alterar senha */}
+          {!isEditing && !isChangingPassword && (
+            <TouchableOpacity
+              style={styles.changePasswordButton}
+              onPress={() => setIsChangingPassword(true)}
+            >
+              <Ionicons name="lock-closed-outline" size={20} color="white" />
+              <Text style={styles.changePasswordText}>Alterar Senha</Text>
+            </TouchableOpacity>
+          )}
 
-              <View style={styles.inputContainer}>
-                <Text style={styles.inputLabel}>Confirmar Nova Senha</Text>
-                <TextInput
-                  style={styles.textInput}
-                  value={confirmarSenha}
-                  onChangeText={setConfirmarSenha}
-                  placeholder="Confirme sua nova senha"
-                  placeholderTextColor="rgba(255, 255, 255, 0.5)"
-                  secureTextEntry
-                />
+          {/* Senha Input - só aparece quando alterando senha */}
+          {isChangingPassword && (
+            <View style={styles.inputContainer}>
+              <Text style={styles.inputLabel}>Nova Senha</Text>
+              <TextInput
+                style={styles.textInput}
+                value={senha}
+                onChangeText={setSenha}
+                placeholder="Digite sua nova senha"
+                placeholderTextColor="rgba(255, 255, 255, 0.5)"
+                secureTextEntry
+              />
+              <View style={styles.passwordActions}>
+                <TouchableOpacity
+                  style={styles.cancelPasswordButton}
+                  onPress={() => {
+                    setSenha('');
+                    setIsChangingPassword(false);
+                  }}
+                >
+                  <Text style={styles.cancelPasswordText}>Cancelar</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.savePasswordButton}
+                  onPress={handleChangePassword}
+                  disabled={isChangingPasswordLoading}
+                >
+                  {isChangingPasswordLoading ? (
+                    <ActivityIndicator size="small" color="white" />
+                  ) : (
+                    <Text style={styles.savePasswordText}>Alterar Senha</Text>
+                  )}
+                </TouchableOpacity>
               </View>
-            </>
+            </View>
           )}
 
           {/* Avatar Selector */}
@@ -410,5 +439,52 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     marginLeft: 8,
+  },
+  changePasswordButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 10,
+    paddingVertical: 12,
+    borderRadius: 8,
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.2)',
+  },
+  changePasswordText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '500',
+    marginLeft: 8,
+  },
+  passwordActions: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 12,
+    gap: 12,
+  },
+  cancelPasswordButton: {
+    flex: 1,
+    paddingVertical: 12,
+    borderRadius: 8,
+    backgroundColor: 'rgba(255, 59, 48, 0.8)',
+    alignItems: 'center',
+  },
+  cancelPasswordText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  savePasswordButton: {
+    flex: 1,
+    paddingVertical: 12,
+    borderRadius: 8,
+    backgroundColor: 'rgba(76, 175, 80, 0.8)',
+    alignItems: 'center',
+  },
+  savePasswordText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '600',
   },
 });
