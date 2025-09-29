@@ -22,7 +22,7 @@ export default function HomeScreen() {
   const { data } = useFetchHomeVideos();
   const { data: categorias } = useFetchCategorias();
 
-  const [selectedCategory, setSelectedCategory] = React.useState<number | null>(null);
+  const [selectedCategory, setSelectedCategory] = React.useState<string | null>(null);
 
   // Selecionar vídeo aleatório para o card destacado
   const getRandomVideo = React.useMemo(() => {
@@ -63,21 +63,21 @@ export default function HomeScreen() {
           >
             {categorias?.map((categoria) => (
               <TouchableOpacity 
-                key={categoria.id} 
+                key={categoria.slug} 
                 style={[
                   styles.categoryButton,
-                  selectedCategory === categoria.id && styles.categoryButtonSelected
+                  selectedCategory === categoria.slug && styles.categoryButtonSelected
                 ]}
               onPress={() => {
                 setSelectedCategory(
-                  selectedCategory === categoria.id ? null : categoria.id
+                  selectedCategory === categoria.slug ? null : categoria.slug
                 );
-                router.push(`/category/${categoria.id}`);
+                router.push(`/category/${categoria.slug}`);
               }}
               >
                 <Text style={[
                   styles.categoryText,
-                  selectedCategory === categoria.id && styles.categoryTextSelected
+                  selectedCategory === categoria.slug && styles.categoryTextSelected
                 ]}>
                   {categoria.titulo}
                 </Text>

@@ -6,14 +6,14 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 
 import {
-  Dimensions,
-  FlatList,
-  Image,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
+    Dimensions,
+    FlatList,
+    Image,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
 } from 'react-native';
 
 const { width } = Dimensions.get('window');
@@ -22,11 +22,11 @@ const CARD_HEIGHT = CARD_WIDTH * 1.4;
 
 
 export default function CategoryScreen() {
-  const { id } = useLocalSearchParams();
+  const { slug } = useLocalSearchParams();
 
   // Usar o hook para buscar vídeos da categoria
   const { data: categoryVideos } = useFetchVideos({ 
-    params: `categoria=${id}` 
+    params: `categoria=${slug}` 
   });
 
   const renderVideoItem = ({ item, index }: { item: any; index: number }) => (
@@ -73,7 +73,7 @@ export default function CategoryScreen() {
           >
             <Ionicons name="arrow-back" size={24} color="white" />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Categoria {id}</Text>
+          <Text style={styles.headerTitle}>Categoria {slug}</Text>
           <View style={styles.placeholder} />
         </View>
 
